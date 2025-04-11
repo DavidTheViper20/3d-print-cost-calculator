@@ -103,4 +103,4 @@ def calculate_cost():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)  # Listen on all IPs and port 5000
