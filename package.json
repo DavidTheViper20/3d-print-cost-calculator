@@ -1,0 +1,22 @@
+{
+  "name": "my-shopify-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@koa/router": "^13.1.0",
+    "@shopify/koa-shopify-auth": "^5.0.3",
+    "@shopify/shopify-api": "^11.12.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "koa": "^2.16.1",
+    "koa-session": "^7.0.2",
+    "session": "^0.1.0"
+  }
+}
