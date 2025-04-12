@@ -160,156 +160,167 @@
 </head>
 <body>
 
-    <div class="left-container"> 
-        <h1>3D Print Cost Calculator</h1>
+    <div class="page-width">
+        <div class="print-calculator" style="padding: 2rem; background-color: #f8f9fa; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+       <div class="left-container"> 
+              <h1>Custom 3D Prints</h1>
+              
+              <div id="file-upload-container" style="display: flex; align-items: center; width: 100%;">
+                  <!-- File Upload (Clipped to the Left) -->
+                  <div style="flex: 1;">
+                      <input type="file" id="fileInput" />
+                      <p id="uploadStatus"></p>
+                  </div>
+              </div>
+          
+              <!-- Material Type Selector -->
+              <div class="input-container">
+                  <label for="materialType">Material Type:</label>
+                  <div class="checkbox-container">
+                      <div class="material-option selected" id="PLA" onclick="selectMaterial('PLA')">PLA</div>
+                      <div class="material-option" id="ABS" onclick="selectMaterial('ABS')">ABS</div>
+                      <div class="material-option" id="PETG" onclick="selectMaterial('PETG')">PETG</div>
+                      <div class="material-option" id="TPU" onclick="selectMaterial('TPU')">TPU</div>
+                      <div class="material-option" id="Resin" onclick="selectMaterial('Resin')">Resin</div>
+                  </div>
+              </div>
+          
+              <!-- Colour Selector -->
+              <div class="input-container">
+                  <label for="materialColours">Material Colours:</label>
+                  <div class="checkbox-container">
+                      <div class="material-option red" id="Red" onclick="selectColour('Red')">Red</div>
+                      <div class="material-option orange" id="Orange" onclick="selectColour('Orange')">Orange</div>
+                      <div class="material-option yellow" id="Yellow" onclick="selectColour('Yellow')">Yellow</div>
+                      <div class="material-option green" id="Green" onclick="selectColour('Green')">Green</div>
+                      <div class="material-option blue" id="Blue" onclick="selectColour('Blue')">Blue</div>
+                      <div class="material-option indigo" id="Indigo" onclick="selectColour('Indigo')">Indigo</div>
+                      <div class="material-option violet" id="Violet" onclick="selectColour('Violet')">Violet</div>
+                      <div class="material-option white" id="White" onclick="selectColour('White')">White</div>
+                      <div class="material-option black" id="Black" onclick="selectColour('Black')">Black</div>
+                  </div>
+              </div>
+          
+              <!-- Infill Density -->
+              <div class="input-container">
+                  <label for="infill">Infill Density: <span id="infillValue">20</span>%</label>
+                  <input type="range" id="infill" min="0" max="100" value="20" oninput="updateInfillValue()">
+              </div>
+          
+      <!-- Shell Options (Single Horizontal Line) -->
+      <div id="shell-options-container" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; width: 100%; margin-top: 10px;">
+      
+        <!-- Wall Layers -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <label for="wallLayers">Wall Layers:</label>
+          <input type="number" id="wallLayers" value="3" min="1" step="1" style="width: 70px;" />
+        </div>
+      
+        <!-- Top/Bottom Layers -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <label for="topBottomLayers">Top/Bottom Layers:</label>
+          <input type="number" id="topBottomLayers" value="2" min="1" step="1" style="width: 70px;" />
+        </div>
+      
+        <!-- Layer Height -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <label for="layerHeight">Layer Height (mm):</label>
+          <input type="number" id="layerHeight" value="0.2" min="0.05" step="0.05" style="width: 70px;" />
+        </div>
+      
+        <!-- Quantity -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" value="1" min="1" step="1" style="width: 70px;" />
+        </div>
+      
+      </div>
+                  
+              <!-- Calculate Button with blue background -->
+              <button onclick="calculateCost()" style="padding: 10px 20px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px;">
+                  Calculate Cost
+              </button>
+          
+              <!-- Notes Section -->
+              <div class="input-container">
+                  <label for="notes">Notes:</label>
+                  <textarea id="notes" rows="12" placeholder="Add any additional notes here..." style="width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ddd; resize: none;"></textarea>
+              </div>
+          
+              <!-- Total Cost Section -->
+              <div class="total-cost">
+                  <p><strong>Total Cost:</strong> $<span id="finalTotalCost">0.00</span></p>
+              </div>
+          </div>
+      
+      
+      
         
-        <div id="file-upload-container" style="display: flex; align-items: center; width: 100%;">
-            <!-- File Upload (Clipped to the Left) -->
-            <div style="flex: 1;">
-                <input type="file" id="fileInput" />
-                <p id="uploadStatus"></p>
-            </div>
-        
-            <!-- Quantity (Slightly to the Right of File Input) -->
-            <div style="margin-left: 20px; margin-right: 40px;">
-                <label for="quantity" style="margin-right: 5px;">Quantity:</label>
-                <input type="number" id="quantity" value="1" min="1" step="1" style="width: 70px;" />
-            </div>
-        </div>
-    
-        <!-- Material Type Selector -->
-        <div class="input-container">
-            <label for="materialType">Material Type:</label>
-            <div class="checkbox-container">
-                <div class="material-option selected" id="PLA" onclick="selectMaterial('PLA')">PLA</div>
-                <div class="material-option" id="ABS" onclick="selectMaterial('ABS')">ABS</div>
-                <div class="material-option" id="PETG" onclick="selectMaterial('PETG')">PETG</div>
-                <div class="material-option" id="TPU" onclick="selectMaterial('TPU')">TPU</div>
-                <div class="material-option" id="Resin" onclick="selectMaterial('Resin')">Resin</div>
-            </div>
-        </div>
-    
-        <!-- Colour Selector -->
-        <div class="input-container">
-            <label for="materialColours">Material Colours:</label>
-            <div class="checkbox-container">
-                <div class="material-option red" id="Red" onclick="selectColour('Red')">Red</div>
-                <div class="material-option orange" id="Orange" onclick="selectColour('Orange')">Orange</div>
-                <div class="material-option yellow" id="Yellow" onclick="selectColour('Yellow')">Yellow</div>
-                <div class="material-option green" id="Green" onclick="selectColour('Green')">Green</div>
-                <div class="material-option blue" id="Blue" onclick="selectColour('Blue')">Blue</div>
-                <div class="material-option indigo" id="Indigo" onclick="selectColour('Indigo')">Indigo</div>
-                <div class="material-option violet" id="Violet" onclick="selectColour('Violet')">Violet</div>
-                <div class="material-option white" id="White" onclick="selectColour('White')">White</div>
-                <div class="material-option black" id="Black" onclick="selectColour('Black')">Black</div>
-            </div>
-        </div>
-    
-        <!-- Infill Density -->
-        <div class="input-container">
-            <label for="infill">Infill Density: <span id="infillValue">20</span>%</label>
-            <input type="range" id="infill" min="0" max="100" value="20" oninput="updateInfillValue()">
-        </div>
-    
-        <div id="shell-options-container" style="display: flex; align-items: center; width: 100%; margin-top: 10px;">
-            <!-- Wall Layers -->
-            <div style="flex: 1; display: flex; align-items: center;">
-                <label for="wallLayers" style="margin-right: 5px;">Wall Layers:</label>
-                <input type="number" id="wallLayers" value="3" min="1" step="1" style="width: 55px;" />
-            </div>
-        
-            <!-- Top/Bottom Layers -->
-            <div style="display: flex; align-items: center; margin-left: 10px;">
-                <label for="topBottomLayers" style="margin-right: 5px;">Top/Bottom Layers:</label>
-                <input type="number" id="topBottomLayers" value="2" min="1" step="1" style="width: 55px;" />
-            </div>
-        
-            <!-- Layer Height -->
-            <div style="display: flex; align-items: center; margin-left: 10px;">
-                <label for="layerHeight" style="margin-right: 5px;">Layer Height (mm):</label>
-                <input type="number" id="layerHeight" value="0.2" min="0.05" step="0.05" style="width: 75px;" />
-            </div>
-        </div>
-    
-        <!-- Calculate Button with blue background -->
-        <button onclick="calculateCost()" style="padding: 10px 20px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px;">
-            Calculate Cost
-        </button>
-    
-        <!-- Notes Section -->
-        <div class="input-container">
-            <label for="notes">Notes:</label>
-            <textarea id="notes" rows="12" placeholder="Add any additional notes here..." style="width: 96.5%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ddd; resize: none;"></textarea>
-        </div>
-    
-        <!-- Total Cost Section -->
-        <div class="total-cost">
-            <p><strong>Total Cost:</strong> $<span id="finalTotalCost">0.00</span></p>
-        </div>
-    </div>
-    
-    <!-- Settings Box on the Right -->
-    <div class="settings">
-        <h2>Master Settings</h2>
-    
-        <!-- Price Control -->
-        <div class="input-container">
-            <label for="pricePerGram">Price per Gram ($):</label>
-            <input type="number" id="pricePerGram" value="0.15" step="0.01" onchange="calculateCost()">
-        </div>
-        <div class="input-container">
-            <label for="pricePerHour">Price per Hour ($):</label>
-            <input type="number" id="pricePerHour" value="5" step="0.1" onchange="calculateCost()">
-        </div>
-    
-        <!-- Printer Speed -->
-        <div class="input-container">
-            <label for="printSpeed">Printer Speed (mm/s):</label>
-            <input type="number" id="printSpeed" value="120" min="10" max="200" onchange="calculateCost()">
-        </div>
-    
-        <!-- Line Width -->
-        <div class="input-container">
-            <label for="lineWidth">Line Width (mm):</label>
-            <input type="number" id="lineWidth" value="0.2" step="0.05" min="0.2" max="1" onchange="calculateCost()">
-        </div>
-    
-        <!-- Cost Breakdown -->
-        <div class="result">
-            <p><strong>Volume:</strong> <span id="volume">0</span> mm³</p>
-            <p><strong>Weight:</strong> <span id="weight">0.00</span> g</p>
-            <p><strong>Material Cost:</strong> $<span id="materialCost">0.00</span></p>
-            <p><strong>Time Cost:</strong> $<span id="timeCost">0.00</span></p>
-            <p><strong>Total Cost:</strong> $<span id="totalCost">0.00</span></p>
-        </div>
-<!-- DiscountPercentage Section -->
-<div id="DiscountPercentage" style="padding-top: 20px;">
-    <div>
-        <label for="discountPercentage">Discount per Quantity (%):</label>
-        <input type="number" id="discountPercentage" value="5" step="1" min="0" />
-    </div>
-</div>
+          <!-- Settings Box on the Right -->
+          <div class="settings">
+              <h2>Master Settings</h2>
+          
+              <!-- Price Control -->
+              <div class="input-container">
+                  <label for="pricePerGram">Price per Gram ($):</label>
+                  <input type="number" id="pricePerGram" value="0.15" step="0.01" onchange="calculateCost()">
+              </div>
+              <div class="input-container">
+                  <label for="pricePerHour">Price per Hour ($):</label>
+                  <input type="number" id="pricePerHour" value="5" step="0.1" onchange="calculateCost()">
+              </div>
+          
+              <!-- Printer Speed -->
+              <div class="input-container">
+                  <label for="printSpeed">Printer Speed (mm/s):</label>
+                  <input type="number" id="printSpeed" value="120" min="10" max="200" onchange="calculateCost()">
+              </div>
+          
+              <!-- Line Width -->
+              <div class="input-container">
+                  <label for="lineWidth">Line Width (mm):</label>
+                  <input type="number" id="lineWidth" value="0.2" step="0.05" min="0.2" max="1" onchange="calculateCost()">
+              </div>
+          
+              <!-- Cost Breakdown -->
+              <div class="result">
+                  <p><strong>Volume:</strong> <span id="volume">0</span> mm³</p>
+                  <p><strong>Weight:</strong> <span id="weight">0.00</span> g</p>
+                  <p><strong>Material Cost:</strong> $<span id="materialCost">0.00</span></p>
+                  <p><strong>Time Cost:</strong> $<span id="timeCost">0.00</span></p>
+                  <p><strong>Total Cost:</strong> $<span id="totalCost">0.00</span></p>
+              </div>
+      <!-- DiscountPercentage Section -->
+      <div id="DiscountPercentage" style="padding-top: 20px;">
+          <div>
+              <label for="discountPercentage">Discount per Quantity (%):</label>
+              <input type="number" id="discountPercentage" value="5" step="1" min="0" />
+          </div>
+      </div>
+      
+      <!-- Additional Fees Section -->
+      <div id="AdditionalFees" style="padding-top: 20px;">
+          <div>
+              <label for="additionalFees">Flat Additional Fee ($):</label>
+              <input type="number" id="additionalFees" value="5" step="0.01" min="0" />
+          </div>
+      </div>
+          
+              <!-- Influenced Weight -->
+              <div class="result">
+                  <p><strong>Influenced Weight:</strong> <span id="infillWeight">0.00</span> g</p>
+              </div>
+          
+              <!-- Print Time Section (Moved to Settings) -->
+              <div class="print-time-section">
+                  <p><strong>Print Time:</strong> <span id="printTime">0.00</span> hours</p>
+                  <p><small>Note: Print time is based on a nozzle size of 0.4mm and a print speed of 120mm/s.</small></p>
+              </div>
+          </div>
+      </div>
+      </div>
 
-<!-- Additional Fees Section -->
-<div id="AdditionalFees" style="padding-top: 20px;">
-    <div>
-        <label for="additionalFees">Flat Additional Fee ($):</label>
-        <input type="number" id="additionalFees" value="5" step="0.01" min="0" />
-    </div>
-</div>
-    
-        <!-- Influenced Weight -->
-        <div class="result">
-            <p><strong>Influenced Weight:</strong> <span id="infillWeight">0.00</span> g</p>
-        </div>
-    
-        <!-- Print Time Section (Moved to Settings) -->
-        <div class="print-time-section">
-            <p><strong>Print Time:</strong> <span id="printTime">0.00</span> hours</p>
-            <p><small>Note: Print time is based on a nozzle size of 0.4mm and a print speed of 120mm/s.</small></p>
-        </div>
-    </div>
-    
+      
     <script>
         let volumeMm3 = 0;  
         let weightG = 0;  
