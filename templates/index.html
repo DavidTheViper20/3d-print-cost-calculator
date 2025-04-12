@@ -306,7 +306,17 @@
         </div>
       </div>
       
-
+<!-- Add to Cart Button -->
+<button id="addToCartBtn" onclick="addToCart()" style="padding: 10px 20px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px;">
+    Add to Cart
+  </button>
+  
+  <!-- Cart Summary Section (Optional) -->
+  <div id="cartSummary" style="margin-top: 30px;">
+    <h2>Your Cart</h2>
+    <ul id="cartItemsList"></ul>
+    <p><strong>Total Items:</strong> <span id="cartItemCount">0</span></p>
+  </div>
 
     <script>
         let volumeMm3 = 0;  
@@ -466,6 +476,75 @@
             document.getElementById("infillValue").textContent = document.getElementById("infill").value;
             calculateCost();
         }
+        
+    // Add to Shopify Cart Functionality
+    function addToCart() {
+        const quantity = parseInt(document.getElementById("quantity").value) || 1;
+        const totalCost = parseFloat(document.getElementById("finalTotalCost").textContent) || 0;
+
+        // Create a line item with the selected material and colour
+        const selectedColour = document.querySelector('.material-option.selected')?.textContent || 'No Colour Selected';
+        
+        const lineItem = {
+            variant_id: 'your_variant_id_here',  // Replace with the correct variant ID from your Shopify product
+            quantity: quantity,
+            properties: {
+                'Material': selectedMaterial,
+                'Colour': selectedColour,
+                'Volume': volumeMm3,
+                'Weight': weightG.toFixed(2),
+                'Total Cost': totalCost.toFixed(2)
+            }
+        };
+
+        // Add the item to the Shopify cart using the Cart API
+        fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(lineItem)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Item added to Shopify cart:', data);
+            alert('Item added to cart!');
+            updateCartSummary();
+        })
+        .catch(error => {
+            console.error('Error adding item to Shopify cart:', error);
+        });
+    }
+
+    // Function to update the Shopify cart summary
+    function updateCartSummary() {
+        fetch('/cart.js')
+        .then(response => response.json())
+        .then(cart => {
+            const cartItemsList = document.getElementById('cartItemsList');
+            const cartItemCount = document.getElementById('cartItemCount');
+            cartItemsList.innerHTML = ''; // Clear current list
+            let totalItems = 0;
+
+            cart.items.forEach(item => {
+                totalItems += item.quantity;
+                const listItem = document.createElement('li');
+                listItem.textContent = `${item.quantity} x ${item.properties.Material} (${item.properties.Colour}) - $${item.line_price / 100}`;
+                cartItemsList.appendChild(listItem);
+            });
+
+            cartItemCount.textContent = totalItems;
+        })
+        .catch(error => {
+            console.error('Error fetching Shopify cart:', error);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCartSummary();
+    });
+</script>
+
     </script>
     
 </body>
