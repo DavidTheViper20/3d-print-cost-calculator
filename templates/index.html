@@ -86,12 +86,14 @@
             border-radius: 8px;
         }
         .settings {
+            display: none;
             width: 45%;
             background: #f2f2f2;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             margin-left: 20px; 
+             
             
         }
         .settings h2 {
@@ -244,7 +246,7 @@
               <!-- Notes Section -->
               <div class="input-container">
                   <label for="notes">Notes:</label>
-                  <textarea id="notes" rows="12" placeholder="Add any additional notes here..." style="width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ddd; resize: none;"></textarea>
+                  <textarea id="notes" rows="12" placeholder="Add any additional notes here..." style="width: 96.4%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ddd; resize: none;"></textarea>
               </div>
           
               <!-- Total Cost Section -->
@@ -252,8 +254,6 @@
                   <p><strong>Total Cost:</strong> $<span id="finalTotalCost">0.00</span></p>
               </div>
           </div>
-      
-      
       
         
           <!-- Settings Box on the Right -->
@@ -320,7 +320,7 @@
       </div>
       </div>
 
-      
+
     <script>
         let volumeMm3 = 0;  
         let weightG = 0;  
