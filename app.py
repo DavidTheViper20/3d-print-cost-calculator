@@ -138,6 +138,12 @@ def apply_caching(response):
     response.headers['Content-Security-Policy'] = "frame-ancestors 'self' https://z1095y-5j.myshopify.com"
     return response
 
+# Add this to allow embedding in any iframe (X-Frame-Options)
+@app.after_request
+def add_headers(response):
+    response.headers['X-Frame-Options'] = 'ALLOWALL'  # Allow embedding in any iframe
+    return response
+
 # App runner
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
