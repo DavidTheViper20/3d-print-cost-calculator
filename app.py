@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 import numpy as np
 from stl import mesh
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 
 # Initialize the Flask app
 app = Flask(__name__)
