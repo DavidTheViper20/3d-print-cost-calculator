@@ -468,41 +468,29 @@
             calculateCost();
         }
 
-        document.getElementById('add-to-cart-button').addEventListener('click', function() {
-            const totalCost = parseFloat(document.getElementById("finalTotalCost").textContent);
-            const productId = 123456789; // Replace this with the actual product ID in your Shopify store
-            const quantity = parseInt(document.getElementById("quantity").value) || 1; // Get quantity selected by user
-
-            // Prepare line item with the total cost and other relevant data
-            const lineItem = {
-                id: productId, // Product ID (replace with your actual product)
-                quantity: quantity,
-                properties: {
-                    "Total Cost": `$${totalCost.toFixed(2)}` // Add the total cost to cart as a property
-                }
-            };
-
-            addItemToCart(lineItem);
-        });
-
-        // Function to interact with Shopify's cart API
-        function addItemToCart(lineItem) {
-            fetch('/cart/add.js', {
-                method: 'POST',
-                body: JSON.stringify(lineItem),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert("Item added to cart successfully!");
-                console.log(data); // You can check the added item in the console
-            })
-            .catch(error => {
-                console.error("Error adding item to cart: ", error);
-            });
+       // add to cart function
+function addToCart() {
+    const data = {
+        action: 'add_to_cart',
+        variant_id: '42383625060430',
+        quantity: document.getElementById('quantity').value,
+        properties: {
+            "STL File": document.getElementById('fileInput').files[0]?.name || 'N/A',
+            "Material Type": selectedMaterial,
+            "Material Colour": document.querySelector('.material-option.selected')?.id || 'N/A',
+            "Infill Density": document.getElementById('infill').value + '%',
+            "Wall Layers": document.getElementById('wallLayers').value,
+            "Top/Bottom Layers": document.getElementById('topBottomLayers').value,
+            "Layer Height (mm)": document.getElementById('layerHeight').value,
+            "Additional Notes": document.getElementById('additionalNotes').value,
+            "Total Cost": "$" + document.getElementById("finalTotalCost").textContent
         }
+    };
+
+    // Send message to parent Shopify store page via iframe
+    window.parent.postMessage(data, '*');
+}
+
     </script>
 </body>
 </html>
