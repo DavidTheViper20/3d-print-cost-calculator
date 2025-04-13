@@ -3,9 +3,13 @@ from werkzeug.utils import secure_filename
 import os
 import numpy as np
 from stl import mesh
+from flask_cors import CORS  # Import CORS
 
 # Initialize the Flask app
 app = Flask(__name__)
+
+# Enable CORS for your app (allow requests from Shopify)
+CORS(app, origins=["https://ultifab.myshopify.com"])
 
 # Set up a folder to store uploaded files
 UPLOAD_FOLDER = 'uploads'
