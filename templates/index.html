@@ -469,27 +469,57 @@
         }
 
        // add to cart function
-function addToCart() {
-    const data = {
-        action: 'add_to_cart',
-        variant_id: '42383625060430',
-        quantity: document.getElementById('quantity').value,
-        properties: {
-            "STL File": document.getElementById('fileInput').files[0]?.name || 'N/A',
-            "Material Type": selectedMaterial,
-            "Material Colour": document.querySelector('.material-option.selected')?.id || 'N/A',
-            "Infill Density": document.getElementById('infill').value + '%',
-            "Wall Layers": document.getElementById('wallLayers').value,
-            "Top/Bottom Layers": document.getElementById('topBottomLayers').value,
-            "Layer Height (mm)": document.getElementById('layerHeight').value,
-            "Additional Notes": document.getElementById('additionalNotes').value,
-            "Total Cost": "$" + document.getElementById("finalTotalCost").textContent
-        }
+    // Function to handle adding to cart
+    function handleAddToCart() {
+    const material = selectedMaterial;
+    const colour = document.querySelector('.material-option.selected')?.id;
+    const infill = document.getElementById("infill").value;
+    const wallLayers = document.getElementById("wallLayers").value;
+    const topBottomLayers = document.getElementById("topBottomLayers").value;
+    const layerHeight = document.getElementById("layerHeight").value;
+    const quantity = parseInt(document.getElementById("quantity").value, 10);
+    const price = parseFloat(document.getElementById("finalTotalCost").textContent);
+    const notes = document.getElementById('notes').value;
+
+    if (!material || !colour || !quantity || isNaN(price)) {
+        alert("Please fill out all fields before adding to cart.");
+        return;
+    }
+
+    const description = `Material: ${material} (${colour}), Infill: ${infill}%, Walls: ${wallLayers}, Top/Bottom: ${topBottomLayers}, Layer Height: ${layerHeight}mm, Notes: ${notes}`;
+
+    const productData = {
+        items: [{
+            quantity: quantity,
+            id: 42383625060430,  // Your Shopify product variant ID
+            properties: {
+                Details: description
+            }
+        }]
     };
 
-    // Send message to parent Shopify store page via iframe
-    window.parent.postMessage(data, '*');
+    fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Cart add failed");
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert("Product added to cart!");
+    })
+    .catch(error => {
+        console.error("Error adding product to cart:", error);
+    });
 }
+
+document.getElementById("add-to-cart-button").addEventListener('click', handleAddToCart);
 
     </script>
 </body>
