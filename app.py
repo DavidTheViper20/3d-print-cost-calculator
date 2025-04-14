@@ -9,7 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Enable CORS for your Shopify store domain
-CORS(app, origins=["https://ultifabteststore.myshopify.com"])
+CORS(app, origins=["https://ultifab.myshopify.com"])
 
 # Set up a folder to store uploaded files
 UPLOAD_FOLDER = 'uploads'
@@ -68,12 +68,12 @@ def test():
     return 'Flask is working!'
 
 
-# File upload route
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'file' not in request.files:
+# File upload route for calculating volume
+@app.route('/upload-stl', methods=['POST'])
+def upload_stl():
+    if 'stl-file' not in request.files:
         return jsonify({'error': 'No file part'})
-    file = request.files['file']
+    file = request.files['stl-file']
     if file.filename == '':
         return jsonify({'error': 'No selected file'})
     if file and allowed_file(file.filename):
@@ -87,6 +87,7 @@ def upload_file():
         else:
             return jsonify({'error': 'Failed to calculate volume'})
     return jsonify({'error': 'Invalid file type'})
+
 
 # Cost calculation route
 @app.route('/calculate-cost', methods=['POST'])
