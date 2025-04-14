@@ -9,7 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Enable CORS for your Shopify store domain
-CORS(app, origins=["https://ultifabtest.myshopify.com"])
+CORS(app, origins=["https://ultifabteststore.myshopify.com"])
 
 # Set up a folder to store uploaded files
 UPLOAD_FOLDER = 'uploads'
