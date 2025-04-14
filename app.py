@@ -9,7 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Enable CORS for your Shopify store domain
-CORS(app, origins=["https://z1095y-5j.myshopify.com"])
+CORS(app, origins=["https://ultifabteststore.myshopify.com"])
 
 # Set up a folder to store uploaded files
 UPLOAD_FOLDER = 'uploads'
@@ -65,7 +65,29 @@ def test():
 @app.route('/apps/3d-print-calculator', defaults={'path': ''})
 @app.route('/apps/3d-print-calculator/<path:path>')
 def proxy_handler(path):
+    # Render the index.html template for the app proxy path
     return render_template('index.html')
+
+# File upload route
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+
+        volume = calculate_volume(file_path)
+        if volume is not None:
+            return jsonify({'volumeMm3': volume})
+        else:
+            return jsonify({'error': 'Failed to calculate volume'})
+    return jsonify({'error': 'Invalid file type'})
+
 
 # File upload route
 @app.route('/upload', methods=['POST'])
