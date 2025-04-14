@@ -56,16 +56,17 @@ def calculate_weight(volume, infill_density):
 def index():
     return render_template('index.html')
 
+
+@app.route('/tools/cost-calc', methods=['GET'])
+def cost_calc():
+    return render_template('index.html')  # Or the appropriate template for your app
+
+
 # Simple test route
 @app.route('/test')
 def test():
     return 'Flask is working!'
 
-# Shopify App Proxy handler — required for Shopify app proxy path
-@app.route('/apps/3d-print-calculator', defaults={'path': ''})
-@app.route('/apps/3d-print-calculator/<path:path>')
-def proxy_handler(path):
-    return render_template('index.html')
 
 # File upload route
 @app.route('/upload', methods=['POST'])
