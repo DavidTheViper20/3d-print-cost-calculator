@@ -102,6 +102,10 @@ Notes: {notes}
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     zip_filename = f"{stl_name}_{timestamp}.zip"
     zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
+    print(f"ZIP file will be saved at: {zip_path}")
+
+
+    
 
     # Creating the ZIP file
     with zipfile.ZipFile(zip_path, 'w') as zipf:
@@ -111,6 +115,16 @@ Notes: {notes}
 
     download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"  # Correct URL
     return jsonify({"url": download_url})
+
+@app.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    try:
+        # Flask will look in the 'static/downloads/' folder for the file
+        return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
+    except FileNotFoundError:
+        return "File not found", 404
+
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
