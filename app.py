@@ -1,20 +1,24 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 import os
+import zipfile
+from io import BytesIO
 import numpy as np
 from stl import mesh
+import datetime
 
 # Initialize the Flask app
 app = Flask(__name__)
 
-# Set up a folder to store uploaded files
+# Set up folders
 UPLOAD_FOLDER = 'uploads'
+DOWNLOAD_FOLDER = os.path.join('static', 'downloads')
 ALLOWED_EXTENSIONS = {'stl', 'obj'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure the upload folder exists
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+# Ensure folders exist
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 # Helper function to check allowed file extensions
 def allowed_file(filename):
@@ -23,40 +27,28 @@ def allowed_file(filename):
 # Function to calculate the 3D model volume (now in mm³)
 def calculate_volume(file_path):
     try:
-        # Load the 3D model using numpy-stl (only if it's an STL)
         model = mesh.Mesh.from_file(file_path)
-        
-        # Calculate the volume in mm³ (it will return volume in cubic millimeters)
-        volume = model.get_mass_properties()[0]  # This returns the volume in mm³
+        volume = model.get_mass_properties()[0]
         return volume
     except Exception as e:
         return None
 
 # Calculate adjusted weight based on infill density
 def calculate_weight(volume, infill_density):
-    # Model has a perimeter of 0.4mm all around it (walls, roof, and floor)
-    perimeter_volume = volume * 0.4  # Assuming perimeter is 40% of the total volume
-
-    # Infill volume is the remaining space inside
+    perimeter_volume = volume * 0.4
     infill_volume = volume - perimeter_volume
-
-    # Adjust the infill volume based on the infill density
     adjusted_infill_volume = infill_volume * infill_density
-
-    # Total volume = perimeter volume + infill volume
     total_adjusted_volume = perimeter_volume + adjusted_infill_volume
-
-    # Calculate weight based on the total adjusted volume (assuming material density = 1g/cm³)
-    weight = total_adjusted_volume / 1000  # Convert from mm³ to cm³
+    weight = total_adjusted_volume / 1000
     return weight
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # Render your main page template
+    return render_template('index.html')
 
 @app.route('/test')
 def test():
-    return 'Flask is working!'  # Simple test route to check Flask
+    return 'Flask is working!'
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -69,40 +61,57 @@ def upload_file():
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-        # Calculate volume of the uploaded model
+
         volume = calculate_volume(file_path)
         if volume is not None:
-            return jsonify({'volumeMm3': volume})  # Return volume in mm³
+            return jsonify({'volumeMm3': volume})
         else:
             return jsonify({'error': 'Failed to calculate volume'})
     return jsonify({'error': 'Invalid file type'})
+@app.route('/generate_zip', methods=['POST'])
+def generate_zip():
+    if 'stlFile' not in request.files:
+        return jsonify({"error": "No STL file provided"}), 400
 
-@app.route('/calculate-cost', methods=['POST'])
-def calculate_cost():
-    data = request.get_json()
-    volumeMm3 = data.get('volumeMm3')
-    infillDensity = data.get('infillDensity')  # Getting infill density from the frontend
-    layerHeight = data.get('layerHeight')
+    stl_file = request.files['stlFile']
+    stl_filename = secure_filename(stl_file.filename)
+    stl_name = os.path.splitext(stl_filename)[0]
 
-    if volumeMm3 is None or infillDensity is None or layerHeight is None:
-        return jsonify({'error': 'Missing required parameters'})
+    # Collect form data
+    material = request.form.get("material", "N/A")
+    colour = request.form.get("colour", "N/A")
+    infill = request.form.get("infill", "N/A")
+    quantity = request.form.get("quantity", "N/A")
+    cost = request.form.get("totalCost", "N/A")
+    wall = request.form.get("wallLayers", "N/A")
+    top_bottom = request.form.get("topBottomLayers", "N/A")
+    layer = request.form.get("layerHeight", "N/A")
+    notes = request.form.get("notes", "N/A")
 
-    # Calculate the adjusted weight based on the volume and infill density
-    weightG = calculate_weight(volumeMm3, infillDensity)
+    build_text = f"""Material: {material}
+Colour: {colour}
+Infill Density: {infill}%
+Quantity: {quantity}
+Total Cost: ${cost}
+Wall Layers: {wall}
+Top/Bottom Layers: {top_bottom}
+Layer Height: {layer}
+Notes: {notes}
+"""
 
-    # Cost calculation logic
-    material_cost = (weightG * 0.05)  # Material cost based on weight in grams
-    time_cost = (volumeMm3 * 0.02) * (1 + (infillDensity - 0.2) * 2) * layerHeight  # Time cost based on mm³
-    total_cost = material_cost + time_cost
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    zip_filename = f"{stl_name}_{timestamp}.zip"
+    zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
 
-    return jsonify({
-        'material_cost': material_cost,
-        'time_cost': time_cost,
-        'total_cost': total_cost,
-        'weightG': weightG  # Return the adjusted weight
-    })
+    # Creating the ZIP file
+    with zipfile.ZipFile(zip_path, 'w') as zipf:
+        stl_data = stl_file.read()
+        zipf.writestr(f"{stl_name}.stl", stl_data)  # Write the STL file to the ZIP
+        zipf.writestr("build_parameters.txt", build_text)  # Write parameters text file
+
+    download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"  # Correct URL
+    return jsonify({"url": download_url})
 
 if __name__ == '__main__':
-    # Use the PORT environment variable or fallback to 5000 for local testing
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)  # Listen on all IPs and specified port
+    app.run(host='0.0.0.0', port=port)

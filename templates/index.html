@@ -158,6 +158,9 @@
             margin-bottom: 5px;
         }
     </style>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
+
 </head>
 <body>
 
@@ -243,7 +246,12 @@
             <!-- Total Cost -->
             <div class="total-cost">
               <p><strong>Total Cost:</strong> $<span id="finalTotalCost">0.00</span></p>
-              
+
+
+              <!-- Add this right below -->
+<button onclick="importSummary()" style="margin-top: 10px;">Finalise Order</button>
+<input type="text" id="importSummaryField" placeholder="Imported details will appear here..." readonly style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc;" />
+
           </div>
       
           <!-- Settings Box -->
@@ -464,6 +472,55 @@
             document.getElementById("infillValue").textContent = document.getElementById("infill").value;
             calculateCost();
         }
+
+        function importSummary() {
+    const stlFileInput = document.getElementById("fileInput");
+    const stlFile = stlFileInput.files[0];
+
+    if (!stlFile) {
+        alert("Please upload an STL file first!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("stlFile", stlFile);
+    formData.append("material", document.querySelector('.material-option.selected').textContent);
+    formData.append("colour", document.querySelector('.material-option.red.selected, .material-option.orange.selected, .material-option.yellow.selected, .material-option.green.selected, .material-option.blue.selected, .material-option.indigo.selected, .material-option.violet.selected, .material-option.white.selected, .material-option.black.selected')?.textContent || 'N/A');
+    formData.append("infill", document.getElementById("infill").value);
+    formData.append("quantity", document.getElementById("quantity").value);
+    formData.append("totalCost", document.getElementById("finalTotalCost").textContent);
+    formData.append("wallLayers", document.getElementById("wallLayers").value);
+    formData.append("topBottomLayers", document.getElementById("topBottomLayers").value);
+    formData.append("layerHeight", document.getElementById("layerHeight").value);
+    formData.append("notes", document.getElementById("notes").value);
+
+    // Debugging FormData
+    console.log([...formData.entries()]);
+
+    // Show loading indicator
+    const importSummaryField = document.getElementById("importSummaryField");
+    importSummaryField.value = "Processing...";
+
+    fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Response data:", data);  // Debugging log
+
+        if (data.url) {
+            const downloadUrl = data.url;
+            importSummaryField.value = `Download your file: ${downloadUrl}`;  // Show the download link
+        } else {
+            importSummaryField.value = "Request failed";  // Show "Request failed" in the box
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        importSummaryField.value = "Request failed";  // Show "Request failed" in the box if an error occurs
+    });
+}
 
     </script>
 </body>
