@@ -100,21 +100,20 @@ Layer Height: {layer}
 Notes: {notes}
 """
 
+    # Format cost and filename
+    formatted_cost = cost.replace('.', '_') if cost != "N/A" else "N_A"
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    zip_filename = f"{stl_name}_{timestamp}.zip"
+    zip_filename = f"{stl_name}_{formatted_cost}_{timestamp}.zip"
     zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
     print(f"ZIP file will be saved at: {zip_path}")
 
-
-    
-
-    # Creating the ZIP file
+    # Create the ZIP file
     with zipfile.ZipFile(zip_path, 'w') as zipf:
         stl_data = stl_file.read()
-        zipf.writestr(f"{stl_name}.stl", stl_data)  # Write the STL file to the ZIP
-        zipf.writestr("build_parameters.txt", build_text)  # Write parameters text file
+        zipf.writestr(f"{stl_name}.stl", stl_data)  # Write the STL file
+        zipf.writestr("build_parameters.txt", build_text)  # Write parameters
 
-    download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"  # Correct URL
+    download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"
     return jsonify({"filename": os.path.splitext(zip_filename)[0]})
 
 
@@ -125,7 +124,6 @@ def download_file(filename):
         return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
     except FileNotFoundError:
         return "File not found", 404
-
 
 
 if __name__ == '__main__':
