@@ -11,7 +11,7 @@
             margin: 20px auto;
             padding: 20px;
             border-radius: 10px;
-           background: #f9f9f9;
+            background: #f9f9f9;
             display: flex;
             justify-content: space-between;
         }
@@ -85,17 +85,16 @@
             border-radius: 8px;
         }
         .settings {
-            display: none;  /* "none" TO MAKE MASTER SETTINGS VANISH "block "TO MAKE MASTER SETTINGS SHOW */
+            display: none;
             width: 45%;
             background: #f2f2f2;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-left: 20px; 
-             
+            margin-left: 20px;
         }
         .settings h2 {
-            text-align: center; 
+            text-align: center;
             margin-bottom: 20px;
         }
         .settings input {
@@ -107,78 +106,129 @@
             justify-content: space-between;
         }
         .material-option {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+        .material-option.selected {
+            border: 2px solid black;
+        }
+        .material-option:hover {
+            background-color: #bbb;
+        }
+        .colour {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            color: white;
+            font-weight: 500;
+        }
+        .colour.selected {
+            border: 2px solid black;
+        }
+        .colour.black.selected {
+            border: 2px solid rgb(122, 122, 122);
+        }
+        .colour.white {
+            background-color: #ffffff;
+            color: black;
+        }
+        .colour.black {
+            background-color: #000000;
+            color: white;
+        }
+        .colour.red { background-color: #f44336; color: black; }
+        .colour.orange { background-color: #ff9800; color: black; }
+        .colour.yellow { background-color: #ffeb3b; color: black; }
+        .colour.green { background-color: #4caf50; color: black; }
+        .colour.blue { background-color: #2196f3; color: black; }
+        .colour.indigo { background-color: #3f51b5; color: black; }
+        .colour.violet { background-color: #9c27b0; color: black; }
+    
+        .input-container label {
+            margin-top: 15px;
+        }
+    
+        .quantity-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            width: 20%;
+            margin-left: 10px;
+        }
+        .quantity-container label {
+            margin-bottom: 5px;
+        }
+    
+/* General Hover Text Styles */
+.hover-text {
     display: inline-block;
-    padding: 10px 20px;
-    margin: 5px;
-    background: #ddd;
-    border-radius: 5px;
+    margin-left: 8px;
     cursor: pointer;
-    transition: 0.3s;
-    border: 2px solid transparent;
-}
-.material-option.selected {
-    border: 2px solid black;
-}
-.material-option:hover {
-    background-color: #bbb;
-}
-/* Colour buttons styling */
-.colour {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-    border: 2px solid transparent;
-    color: white;
-    font-weight: 500;
+    font-size: 0.85rem;
+    color: #ff9c40;
+    text-decoration: underline;
+    font-family: 'Avenir Next', sans-serif;
+    position: relative; /* Position relative to its container */
+    z-index: 10;
 }
 
-.colour.selected {
-    border: 2px solid black;
+/* Popup Styles */
+.popup-text {
+    font-family: 'Avenir Next', sans-serif; /* Apply Avenir Next font */
+    font-size: 0.9rem; /* Slightly larger text */
+    color: #555;
+    line-height: 1.4; /* Adjust line height for better readability */
 }
 
-/* Grey border for black colour */
-.colour.black.selected {
-    border: 2px solid rgb(122, 122, 122); /* Grey border when black is selected */
+/* Adjust the Popup Size */
+.popup {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position the popup below the .hover-text */
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 15px; /* Add more padding to make the box larger */
+    width: 250px; /* Make the popup box slightly larger */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    margin-top: 5px; /* Adds a small gap between the text and popup */
+    border-radius: 5px; /* Add rounded corners for a smoother look */
 }
 
-.colour.white {
-    background-color: #ffffff;
-    color: black;
+/* Display the popup when hovering over the corresponding .hover-text element */
+.hover-text:hover + .popup {
+    display: block; /* This shows the popup when hovering over the .hover-text */
 }
 
-.colour.black {
-    background-color: #000000;
-    color: white;
-}
-
-.colour.red { background-color: #f44336; color: black; }
-.colour.orange { background-color: #ff9800; color: black; }
-.colour.yellow { background-color: #ffeb3b; color: black; }
-.colour.green { background-color: #4caf50; color: black; }
-.colour.blue { background-color: #2196f3; color: black; }
-.colour.indigo { background-color: #3f51b5; color: black; }
-.colour.violet { background-color: #9c27b0; color: black; }
-
-.input-container label {
-    margin-top: 15px;
-}
-
-
-/* Quantity input styles */
-.quantity-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 20%;
+/* Styling for the number input fields */
+input[type="number"] {
+    width: 70px;
+    padding: 5px;
+    font-size: 1em;
+    margin-top: 5px;
     margin-left: 10px;
+    box-sizing: border-box;
 }
-.quantity-container label {
-    margin-bottom: 5px;
-}  
+
+.popup-image {
+    width: 100%;
+    max-width: 50px;
+    height: auto;
+}
+
     </style>
+    
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
 
@@ -228,31 +278,63 @@
   </div>
 </div>
       
-            <!-- Infill Density -->
-            <div class="input-container">
-              <label for="infill">Infill Density: <span id="infillValue">20</span>%</label>
-              <input type="range" id="infill" min="0" max="100" value="20" oninput="updateInfillValue()">
+<div class="input-container" style="position: relative;">
+    <label for="infill">
+        Infill Density: <span id="infillValue">20</span>%
+        <span class="popup-wrapper" style="position: relative; display: inline-block;">
+            <span id="egText" class="hover-text">.eg</span>
+            <div id="popup" class="popup">
+                <!-- Use the correct relative path to your image -->
+                <img src="{{ url_for('static', filename='images/percentage-of-3D-printed-infill-2.jpg') }}" alt="Infill Density" class="popup-image" />
+                <p class="popup-text">Infill density refers to the amount of material used inside a 3D printed object. A higher infill percentage means a stronger, more solid print, while a lower infill percentage reduces the material used, making the print lighter but less durable.</p>
             </div>
-      
-            <!-- Shell Options -->
-            <div id="shell-options-container" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; width: 100%; margin-top: 10px;">
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="wallLayers">Wall Layers:</label>
-                <input type="number" id="wallLayers" value="3" min="1" step="1" style="width: 70px;" />
-              </div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="topBottomLayers">Top/Bottom Layers:</label>
-                <input type="number" id="topBottomLayers" value="2" min="1" step="1" style="width: 70px;" />
-              </div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="layerHeight">Layer Height (mm):</label>
-                <input type="number" id="layerHeight" value="0.2" min="0.05" max="0.4" step="0.05" style="width: 70px;" />
-              </div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" value="1" min="1" step="1" style="width: 70px;" />
-              </div>
-            </div>
+        </span>
+    </label>
+
+    <input type="range" id="infill" min="0" max="100" value="20" oninput="updateInfillValue()">
+</div>
+
+  
+  <div id="shell-options-container" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; width: 100%; margin-top: 10px;">
+    <!-- Wall Layers Section -->
+    <div style="display: flex; align-items: center; gap: 6px; position: relative;">
+        <label for="wallLayers">Wall Layers:</label>
+        <input type="number" id="wallLayers" value="3" min="1" step="1" style="width: 64px;" />
+        <span id="egTextWallLayers" class="hover-text">.eg</span>
+        <div id="popupWallLayers" class="popup">
+            <img src="https://via.placeholder.com/100" alt="Sample Image" class="popup-image" />
+            <p class="popup-text">Wall layers are the outermost printed layers of your 3D model. They provide the external strength and durability needed to hold the shape of your object. Increasing the number of wall layers can improve the sturdiness and surface quality of the printed object, making it more resistant to wear and tear.</p>
+        </div>
+    </div>
+
+    <!-- Top/Bottom Layers Section -->
+    <div style="display: flex; align-items: center; gap: 6px; position: relative;">
+        <label for="topBottomLayers">Top/Bottom Layers:</label>
+        <input type="number" id="topBottomLayers" value="2" min="1" step="1" style="width: 64px;" />
+        <span id="egTextTopBottom" class="hover-text">.eg</span>
+        <div id="popupTopBottom" class="popup">
+            <img src="https://via.placeholder.com/100" alt="Sample Image" class="popup-image" />
+            <p class="popup-text">Top and bottom layers are the solid layers that cover the top and bottom faces of your 3D print. They provide a smooth surface finish and help seal the interior of the print. The more top/bottom layers you use, the better the surface finish and strength of the top and bottom faces will be. This is especially important for prints where the top needs to be flat and smooth.
+            </p>
+        </div>
+    </div>
+
+    <!-- Layer Height Section -->
+    <div style="display: flex; align-items: center; gap: 6px; position: relative;">
+        <label for="layerHeight">Layer Height (mm):</label>
+        <input type="number" id="layerHeight" value="0.2" min="0.05" max="0.4" step="0.05" style="width: 64px;" />
+        <span id="egTextLayerHeight" class="hover-text">.eg</span>
+        <div id="popupLayerHeight" class="popup">
+            <img src="https://via.placeholder.com/100" alt="Sample Image" class="popup-image" />
+            <p class="popup-text">Layer height refers to the thickness of each individual printed layer. A smaller layer height (e.g., 0.1mm) creates more detailed prints, but takes longer to print. A larger layer height (e.g., 0.3mm) is faster but can result in a rougher surface finish. Choose a layer height based on the level of detail and print speed you're aiming for.</p>
+        </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 6px;">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1" step="1" style="width: 64px;" />
+      </div>
+</div>
       
             <!-- Notes Section -->
             <div class="input-container">
@@ -660,6 +742,33 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
 });
 
         }
+
+        const infillSlider = document.getElementById('infill');
+const infillValue = document.getElementById('infillValue');
+
+function updateInfillValue() {
+    const value = infillSlider.value;
+    infillValue.textContent = value;
+
+    // Get the width of the slider to adjust the background width proportionally
+    const sliderWidth = infillSlider.offsetWidth;
+    const percent = (value - infillSlider.min) / (infillSlider.max - infillSlider.min);
+
+    // Ensure the blue part is slightly adjusted at the extremes to cover the entire slider properly
+    const backgroundWidth = sliderWidth * percent; // Background width based on the slider value
+    const thumbOffset = 12; // This accounts for the thumb size adjustment
+
+    // Apply the background gradient ensuring that the gradient doesn't just start at the beginning or end.
+    infillSlider.style.background = `linear-gradient(to right, #007BFF ${backgroundWidth + thumbOffset}px, #ccc ${backgroundWidth + thumbOffset}px)`;
+}
+
+// Call once to initialize on load
+updateInfillValue();
+
+// Update the value dynamically as the slider moves
+infillSlider.addEventListener('input', updateInfillValue);
+
+
     </script>
 </body>
 </html>
