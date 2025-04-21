@@ -68,6 +68,7 @@ def upload_file():
         else:
             return jsonify({'error': 'Failed to calculate volume'})
     return jsonify({'error': 'Invalid file type'})
+
 @app.route('/generate_zip', methods=['POST'])
 def generate_zip():
     if 'stlFile' not in request.files:
@@ -86,6 +87,8 @@ def generate_zip():
     wall = request.form.get("wallLayers", "N/A")
     top_bottom = request.form.get("topBottomLayers", "N/A")
     layer = request.form.get("layerHeight", "N/A")
+    weight = request.form.get("influencedWeight", "N/A")
+    print_time = request.form.get("printTime", "N/A")
     notes = request.form.get("notes", "N/A")
 
     build_text = f"""Material: {material}
@@ -96,6 +99,8 @@ Total Cost: ${cost}
 Wall Layers: {wall}
 Top/Bottom Layers: {top_bottom}
 Layer Height: {layer}
+Influenced Weight: {weight}
+Print Time: {print_time}
 Notes: {notes}
 """
 
@@ -114,7 +119,8 @@ Notes: {notes}
         zipf.writestr("build_parameters.txt", build_text)  # Write parameters text file
 
     download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"  # Correct URL
-    return jsonify({"filename": zip_filename})
+    return jsonify({"filename": os.path.splitext(zip_filename)[0]})
+
 
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):

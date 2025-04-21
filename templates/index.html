@@ -11,7 +11,6 @@
             margin: 20px auto;
             padding: 20px;
             border-radius: 10px;
-           /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
            background: #f9f9f9;
             display: flex;
             justify-content: space-between;
@@ -86,7 +85,7 @@
             border-radius: 8px;
         }
         .settings {
-            display: none;
+            display: none;  /* "none" TO MAKE MASTER SETTINGS VANISH "block "TO MAKE MASTER SETTINGS SHOW */
             width: 45%;
             background: #f2f2f2;
             padding: 20px;
@@ -96,7 +95,7 @@
              
         }
         .settings h2 {
-            text-align: center;
+            text-align: center; 
             margin-bottom: 20px;
         }
         .settings input {
@@ -108,55 +107,69 @@
             justify-content: space-between;
         }
         .material-option {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background: #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 2px solid transparent;
-        }
-        .material-option.selected {
-            border: 2px solid black;
-        }
-        .material-option.black.selected {
-            border: 2px solid rgb(122, 122, 122);
-        }
-        .material-option:hover {
-            background-color: #bbb;
-        }
-        .material-option.white {
-            color: black;
-        }
-        .material-option.black {
-            color: white;
-        }
-        .input-container label {
-            margin-top: 15px;
-        }
-        /* Colour Selector Adjustments */
-        .material-option.red { background-color: #f44336; }
-        .material-option.orange { background-color: #ff9800; }
-        .material-option.yellow { background-color: #ffeb3b; }
-        .material-option.green { background-color: #4caf50; }
-        .material-option.blue { background-color: #2196f3; }
-        .material-option.indigo { background-color: #3f51b5; }
-        .material-option.violet { background-color: #9c27b0; }
-        .material-option.white { background-color: #ffffff; color: black; }
-        .material-option.black { background-color: #000000; color: white; }
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    background: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+.material-option.selected {
+    border: 2px solid black;
+}
+.material-option:hover {
+    background-color: #bbb;
+}
 
-        /* New styles to position Quantity */
-        .quantity-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            width: 20%;
-            margin-left: 10px;
-        }
-        .quantity-container label {
-            margin-bottom: 5px;
-        }
+/* Colour buttons styling */
+.colour {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid transparent;
+    color: white;
+    font-weight: 500;
+}
+.colour.selected {
+    border: 2px solid black;
+}
+.colour.white {
+    background-color: #ffffff;
+    color: black;
+}
+.colour.black {
+    background-color: #000000;
+    color: white;
+    border-color: rgb(122, 122, 122);
+}
+.colour.red { background-color: #f44336; color: black;}
+.colour.orange { background-color: #ff9800; color: black;}
+.colour.yellow { background-color: #ffeb3b; color: black; }
+.colour.green { background-color: #4caf50; color: black;}
+.colour.blue { background-color: #2196f3; color: black;}
+.colour.indigo { background-color: #3f51b5; color: black;}
+.colour.violet { background-color: #9c27b0; color: black;}
+
+.input-container label {
+    margin-top: 15px;
+}
+
+/* Quantity input styles */
+.quantity-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 20%;
+    margin-left: 10px;
+}
+.quantity-container label {
+    margin-bottom: 5px;
+}  
     </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
@@ -179,32 +192,32 @@
             </div>
       
             <!-- Material Type Selector -->
-            <div class="input-container">
-              <label for="materialType">Material Type:</label>
-              <div class="checkbox-container">
-                <div class="material-option selected" id="PLA" onclick="selectMaterial('PLA')">PLA</div>
-                <div class="material-option" id="ABS" onclick="selectMaterial('ABS')">ABS</div>
-                <div class="material-option" id="PETG" onclick="selectMaterial('PETG')">PETG</div>
-                <div class="material-option" id="TPU" onclick="selectMaterial('TPU')">TPU</div>
-                <div class="material-option" id="Resin" onclick="selectMaterial('Resin')">Resin</div>
-              </div>
-            </div>
-      
-            <!-- Colour Selector -->
-            <div class="input-container">
-              <label for="materialColours">Material Colours:</label>
-              <div class="checkbox-container">
-                <div class="material-option red" id="Red" onclick="selectColour('Red')">Red</div>
-                <div class="material-option orange" id="Orange" onclick="selectColour('Orange')">Orange</div>
-                <div class="material-option yellow" id="Yellow" onclick="selectColour('Yellow')">Yellow</div>
-                <div class="material-option green" id="Green" onclick="selectColour('Green')">Green</div>
-                <div class="material-option blue" id="Blue" onclick="selectColour('Blue')">Blue</div>
-                <div class="material-option indigo" id="Indigo" onclick="selectColour('Indigo')">Indigo</div>
-                <div class="material-option violet" id="Violet" onclick="selectColour('Violet')">Violet</div>
-                <div class="material-option white" id="White" onclick="selectColour('White')">White</div>
-                <div class="material-option black" id="Black" onclick="selectColour('Black')">Black</div>
-              </div>
-            </div>
+<div class="input-container">
+  <label for="materialType">Material Type:</label>
+  <div class="checkbox-container">
+    <div class="material-option selected" id="PLA" onclick="selectMaterial('PLA')">PLA</div>
+    <div class="material-option" id="ABS" onclick="selectMaterial('ABS')">ABS</div>
+    <div class="material-option" id="PETG" onclick="selectMaterial('PETG')">PETG</div>
+    <div class="material-option" id="TPU" onclick="selectMaterial('TPU')">TPU</div>
+    <div class="material-option" id="Resin" onclick="selectMaterial('Resin')">Resin</div>
+  </div>
+</div>
+
+<!-- Colour Selector -->
+<div class="input-container">
+  <label for="materialColours">Material Colours:</label>
+  <div class="checkbox-container">
+    <div class="colour red" id="Red" onclick="selectColour('Red')">Red</div>
+    <div class="colour orange" id="Orange" onclick="selectColour('Orange')">Orange</div>
+    <div class="colour yellow" id="Yellow" onclick="selectColour('Yellow')">Yellow</div>
+    <div class="colour green" id="Green" onclick="selectColour('Green')">Green</div>
+    <div class="colour blue" id="Blue" onclick="selectColour('Blue')">Blue</div>
+    <div class="colour indigo" id="Indigo" onclick="selectColour('Indigo')">Indigo</div>
+    <div class="colour violet" id="Violet" onclick="selectColour('Violet')">Violet</div>
+    <div class="colour white" id="White" onclick="selectColour('White')">White</div>
+    <div class="colour black" id="Black" onclick="selectColour('Black')">Black</div>
+  </div>
+</div>
       
             <!-- Infill Density -->
             <div class="input-container">
@@ -224,18 +237,13 @@
               </div>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <label for="layerHeight">Layer Height (mm):</label>
-                <input type="number" id="layerHeight" value="0.2" min="0.05" step="0.05" style="width: 70px;" />
+                <input type="number" id="layerHeight" value="0.2" min="0.05" max="0.4" step="0.05" style="width: 70px;" />
               </div>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <label for="quantity">Quantity:</label>
                 <input type="number" id="quantity" value="1" min="1" step="1" style="width: 70px;" />
               </div>
             </div>
-      
-            <!-- Calculate Button -->
-            <button onclick="calculateCost()" style="padding: 10px 20px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px;">
-              Calculate Cost
-            </button>
       
             <!-- Notes Section -->
             <div class="input-container">
@@ -313,73 +321,83 @@
           </div>
         </div>
       </div>
-
       <script>
-        let volumeMm3 = 0;  
-        let weightG = 0;  
-        let printSpeed = 120;  
-        const nozzleSize = 0.4;  
-        let selectedMaterial = "PLA";  // Default material
+      let volumeMm3 = 0;  
+      let weightG = 0;  
+      let printSpeed = 120;  
+      const nozzleSize = 0.4;  
+      let selectedMaterial = "PLA";  // Default material
+      let fileUploaded = false;      // Track if STL has been uploaded
+  
+      document.getElementById('fileInput').addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (file) {
+              document.getElementById('uploadStatus').textContent = `Uploading ${file.name}...`;
+  
+              let formData = new FormData();
+              formData.append("file", file);
+  
+              fetch('/upload', { method: "POST", body: formData })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.error) {
+                          alert("Error: " + data.error);
+                      } else {
+                          if (data.volumeMm3) {
+                              volumeMm3 = data.volumeMm3;
+                              fileUploaded = true;  // Mark file as uploaded
+                              weightG = calculateWeight(volumeMm3);
+                              document.getElementById("volume").textContent = volumeMm3;
+                              document.getElementById("weight").textContent = weightG.toFixed(2);
+                              calculateCost();  // Trigger price update now that file is uploaded
+                          } else {
+                              console.error('No volume data returned.');
+                          }
+                          document.getElementById("uploadStatus").textContent = `Uploaded: ${file.name}`;
+                      }
+                  })
+                  .catch(error => {
+                      console.error("Error:", error);
+                  });
+          }
+      });
     
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.getElementById('uploadStatus').textContent = `Uploading ${file.name}...`;
-    
-                let formData = new FormData();
-                formData.append("file", file);
-    
-                fetch('/upload', { method: "POST", body: formData })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert("Error: " + data.error);
-                        } else {
-                            if (data.volumeMm3) {
-                                volumeMm3 = data.volumeMm3;
-                                weightG = calculateWeight(volumeMm3);
-                                document.getElementById("volume").textContent = volumeMm3;
-                                document.getElementById("weight").textContent = weightG.toFixed(2);
-                            } else {
-                                console.error('No volume data returned.');
-                            }
-                            document.getElementById("uploadStatus").textContent = `Uploaded: ${file.name}`;
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                    });
-            }
-        });
-    
-        function selectColour(colour) {
-            const colourOptions = document.querySelectorAll('.material-option.red, .material-option.orange, .material-option.yellow, .material-option.green, .material-option.blue, .material-option.indigo, .material-option.violet, .material-option.white, .material-option.black');
-            colourOptions.forEach(option => option.classList.remove('selected'));
-            document.getElementById(colour).classList.add('selected');
-        }
-    
-        function selectMaterial(material) {
-            const materialOptions = document.querySelectorAll('#PLA, #ABS, #PETG, #TPU, #Resin');
-            materialOptions.forEach(option => option.classList.remove('selected'));
-            document.getElementById(material).classList.add('selected');
-    
-            selectedMaterial = material;
-    
-            let pricePerGram;
-            if (material === "ABS") {
-                pricePerGram = 0.12;
-            } else if (material === "PETG") {
-                pricePerGram = 0.135;
-            } else if (material === "TPU") {
-                pricePerGram = 0.23;
-            } else if (material === "Resin") {
-                pricePerGram = 0.19;
-            } else {
-                pricePerGram = 0.15;  // PLA default
-            }
-    
-            document.getElementById('pricePerGram').value = pricePerGram.toFixed(2);
-        }
+      function selectMaterial(material) {
+    // Deselect all materials
+    const materialOptions = document.querySelectorAll('.material-option');
+    materialOptions.forEach(option => option.classList.remove('selected'));
+    document.getElementById(material).classList.add('selected');
+
+    // Deselect any selected colour
+    const colourOptions = document.querySelectorAll('.colour');
+    colourOptions.forEach(option => option.classList.remove('selected'));
+
+    selectedMaterial = material;
+
+    let pricePerGram;
+    if (material === "ABS") {
+        pricePerGram = 0.12;
+    } else if (material === "PETG") {
+        pricePerGram = 0.135;
+    } else if (material === "TPU") {
+        pricePerGram = 0.23;
+    } else if (material === "Resin") {
+        pricePerGram = 0.19;
+    } else {
+        pricePerGram = 0.15; // PLA default
+    }
+
+    document.getElementById('pricePerGram').value = pricePerGram.toFixed(2);
+}
+
+function selectColour(colour) {
+    // Deselect all other colours
+    const colourOptions = document.querySelectorAll('.colour');
+    colourOptions.forEach(option => option.classList.remove('selected'));
+
+    // Select the clicked colour
+    document.getElementById(colour).classList.add('selected');
+}
     
         function calculateWeight(volumeMm3) {
             const materialDensity = 1.24;
@@ -424,54 +442,125 @@
             document.getElementById("printTime").textContent = `${hours} hours ${minutes} minutes`;
             return printTimeMinutes / 60;
         }
-    
-        function calculateCost() {
-            const influencedWeight = calculateInfluencedWeight();
-            const pricePerGram = parseFloat(document.getElementById("pricePerGram").value);
-            const pricePerHour = parseFloat(document.getElementById("pricePerHour").value);
-            printSpeed = parseFloat(document.getElementById("printSpeed").value);
-            const quantity = parseInt(document.getElementById("quantity").value) || 1;
-    
-            // Get the discount percentage from the input field
-            let discountPercentage = parseFloat(document.getElementById("discountPercentage").value) || 0;
-    
-            // Calculate the discount based on quantity
-            let discount = 0;
-            if (quantity > 1) {
-                discount = (quantity - 1) * discountPercentage; // Apply the discount percentage per extra item
-            }
-    
-            // Cap the discount at 25%
-            if (discount > 25) {
-                discount = 25;
-            }
 
-             // additional fees
-        const additionalFees = parseFloat(document.getElementById("additionalFees").value) || 0;
-    
-            // Calculate the influenced weight based on quantity
-            const adjustedWeight = influencedWeight * quantity;
-    
-            const materialCost = adjustedWeight * pricePerGram;
-            const timeHours = calculatePrintTime(adjustedWeight);
-            const timeCost = timeHours * pricePerHour;
-    
-            // Apply the discount to the total cost
-            const totalCost = ((materialCost + timeCost) * (1 - (discount / 100)) + additionalFees);
-    
-            document.getElementById("materialCost").textContent = materialCost.toFixed(2);
-            document.getElementById("timeCost").textContent = timeCost.toFixed(2);
-            document.getElementById("totalCost").textContent = totalCost.toFixed(2);
-            document.getElementById("finalTotalCost").textContent = totalCost.toFixed(2);
-        }
-    
-        // Recalculate whenever quantity changes
-        document.getElementById("quantity").addEventListener("input", calculateCost);
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        document.getElementById('uploadStatus').textContent = `Uploading ${file.name}...`;
+
+        let formData = new FormData();
+        formData.append("file", file);
+
+        fetch('/upload', { method: "POST", body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    if (data.volumeMm3) {
+                        fileUploaded = true;
+                        volumeMm3 = data.volumeMm3;
+                        weightG = calculateWeight(volumeMm3);
+                        document.getElementById("volume").textContent = volumeMm3;
+                        document.getElementById("weight").textContent = weightG.toFixed(2);
+                    } else {
+                        console.error('No volume data returned.');
+                    }
+                    document.getElementById("uploadStatus").textContent = `Uploaded: ${file.name}`;
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+});
+
+function calculateCost() {
+    if (!fileUploaded) {
+        // Prevent calculation if no STL uploaded
+        document.getElementById("materialCost").textContent = "0.00";
+        document.getElementById("timeCost").textContent = "0.00";
+        document.getElementById("totalCost").textContent = "0.00";
+        document.getElementById("finalTotalCost").textContent = "0.00";
+        return;
+    }
+
+    const influencedWeight = calculateInfluencedWeight();
+    const pricePerGram = parseFloat(document.getElementById("pricePerGram").value);
+    const pricePerHour = parseFloat(document.getElementById("pricePerHour").value);
+    printSpeed = parseFloat(document.getElementById("printSpeed").value);
+    const quantity = parseInt(document.getElementById("quantity").value) || 1;
+
+    // Get the discount percentage from the input field
+    let discountPercentage = parseFloat(document.getElementById("discountPercentage").value) || 0;
+
+    // Calculate the discount based on quantity
+    let discount = 0;
+    if (quantity > 1) {
+        discount = (quantity - 1) * discountPercentage; // Apply the discount percentage per extra item
+    }
+
+    // Cap the discount at 25%
+    if (discount > 25) {
+        discount = 25;
+    }
+
+    // additional fees
+    const additionalFees = parseFloat(document.getElementById("additionalFees").value) || 0;
+
+    // Calculate the influenced weight based on quantity
+    const adjustedWeight = influencedWeight * quantity;
+
+    const materialCost = adjustedWeight * pricePerGram;
+    const timeHours = calculatePrintTime(adjustedWeight);
+    const timeCost = timeHours * pricePerHour;
+
+    // Apply the discount to the total cost
+    const totalCost = ((materialCost + timeCost) * (1 - (discount / 100)) + additionalFees);
+
+    document.getElementById("materialCost").textContent = materialCost.toFixed(2);
+    document.getElementById("timeCost").textContent = timeCost.toFixed(2);
+    document.getElementById("totalCost").textContent = totalCost.toFixed(2);
+    document.getElementById("finalTotalCost").textContent = totalCost.toFixed(2);
+}
+
+// Recalculate whenever quantity changes
+document.getElementById("quantity").addEventListener("input", calculateCost);
     
         function updateInfillValue() {
             document.getElementById("infillValue").textContent = document.getElementById("infill").value;
             calculateCost();
         }
+
+
+        // Automatically update total price on input changes
+const autoUpdateFields = [
+    "infill", "wallLayers", "topBottomLayers",
+    "layerHeight", "lineWidth", "pricePerGram",
+    "pricePerHour", "printSpeed", "discountPercentage", "additionalFees"
+];
+
+autoUpdateFields.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.addEventListener("input", calculateCost);
+    }
+});
+
+// Update when material or color is selected
+document.querySelectorAll('.material-option').forEach(option => {
+    option.addEventListener('click', () => {
+        selectMaterial(option.id);
+        calculateCost();
+    });
+});
+
+document.querySelectorAll('.material-option.red, .material-option.orange, .material-option.yellow, .material-option.green, .material-option.blue, .material-option.indigo, .material-option.violet, .material-option.white, .material-option.black').forEach(option => {
+    option.addEventListener('click', () => {
+        selectColour(option.id);
+        calculateCost();
+    });
+});
 
         function importSummary() {
     const stlFileInput = document.getElementById("fileInput");
@@ -510,7 +599,7 @@
         console.log("Response data:", data);  // Debugging log
 
         if (data.filename) {
-    importSummaryField.value = `Your download filename: ${data.filename}`;
+    importSummaryField.value = `${data.filename}`;
 } else {
             importSummaryField.value = "Request failed";  // Show "Request failed" in the box
         }
@@ -520,7 +609,6 @@
         importSummaryField.value = "Request failed";  // Show "Request failed" in the box if an error occurs
     });
 }
-
     </script>
 </body>
 </html>
