@@ -192,10 +192,11 @@
               Custom 3D Prints
             </h1>
             
-            <div id="file-upload-container" style="display: flex; align-items: center; width: 100%;">
-              <div style="flex: 1;">
-                <input type="file" id="fileInput" />
-                <p id="uploadStatus"></p>
+            <div id="file-upload-container" style="display: flex; flex-direction: column; width: 100%;">
+              <input type="file" id="fileInput" />
+              <div style="display: flex; flex-direction: column;">
+                <p id="uploadStatus" style="color: grey; font-size: 0.9rem; font-style: italic; font-family: 'Avenir Next', sans-serif; margin: 0;"></p>
+                <span id="uploadDisclaimer" style="color: grey; font-size: 0.8rem; font-style: italic; font-family: 'Avenir Next', sans-serif; margin-top: 2px; display: none;">This may take a moment</span>
               </div>
             </div>
       
@@ -338,38 +339,61 @@
       let fileUploaded = false;      // Track if STL has been uploaded
   
       document.getElementById('fileInput').addEventListener('change', function(event) {
-          const file = event.target.files[0];
-          if (file) {
-              document.getElementById('uploadStatus').textContent = `Uploading ${file.name}...`;
-  
-              let formData = new FormData();
-              formData.append("file", file);
-  
-              fetch('/upload', { method: "POST", body: formData })
-                  .then(response => response.json())
-                  .then(data => {
-                      if (data.error) {
-                          alert("Error: " + data.error);
-                      } else {
-                          if (data.volumeMm3) {
-                              volumeMm3 = data.volumeMm3;
-                              fileUploaded = true;  // Mark file as uploaded
-                              weightG = calculateWeight(volumeMm3);
-                              document.getElementById("volume").textContent = volumeMm3;
-                              document.getElementById("weight").textContent = weightG.toFixed(2);
-                              calculateCost();  // Trigger price update now that file is uploaded
-                          } else {
-                              console.error('No volume data returned.');
-                          }
-                          document.getElementById("uploadStatus").textContent = `Uploaded: ${file.name}`;
-                      }
-                  })
-                  .catch(error => {
-                      console.error("Error:", error);
-                  });
-          }
-      });
+    const file = event.target.files[0];
+    const uploadStatus = document.getElementById('uploadStatus');
+    const uploadDisclaimer = document.getElementById('uploadDisclaimer');
     
+    if (file) {
+        let dotCount = 0;
+        const maxDots = 3;
+
+        uploadStatus.textContent = `Uploading ${file.name}`;
+        uploadDisclaimer.style.display = "inline";  // show the disclaimer
+
+        // Start animated dots
+        const uploadInterval = setInterval(() => {
+            dotCount++;
+            uploadStatus.textContent = `Uploading ${file.name}${'.'.repeat(dotCount)}`;
+            if (dotCount === maxDots) dotCount = 0;
+        }, 500);
+
+        let formData = new FormData();
+        formData.append("file", file);
+
+        fetch('/upload', { method: "POST", body: formData })
+            .then(response => response.json())
+            .then(data => {
+                clearInterval(uploadInterval); // stop animation
+
+                if (data.error) {
+                    uploadStatus.textContent = `Error uploading ${file.name}`;
+                    uploadDisclaimer.style.display = "none";
+                    alert("Error: " + data.error);
+                } else {
+                    if (data.volumeMm3) {
+                        volumeMm3 = data.volumeMm3;
+                        fileUploaded = true;  // Mark file as uploaded
+                        weightG = calculateWeight(volumeMm3);
+                        document.getElementById("volume").textContent = volumeMm3;
+                        document.getElementById("weight").textContent = weightG.toFixed(2);
+                        calculateCost();  // Trigger price update
+                    } else {
+                        console.error('No volume data returned.');
+                    }
+
+                    uploadStatus.textContent = `Uploaded: ${file.name}`;
+                    uploadDisclaimer.style.display = "none"; // hide disclaimer
+                }
+            })
+            .catch(error => {
+                clearInterval(uploadInterval); // stop animation
+                console.error("Error:", error);
+                uploadStatus.textContent = `Error uploading ${file.name}`;
+                uploadDisclaimer.style.display = "none";
+            });
+    }
+});
+
       function selectMaterial(material) {
     // Deselect all materials
     const materialOptions = document.querySelectorAll('.material-option');
@@ -582,7 +606,7 @@ document.querySelectorAll('.material-option.red, .material-option.orange, .mater
     const formData = new FormData();
     formData.append("stlFile", stlFile);
     formData.append("material", document.querySelector('.material-option.selected').textContent);
-    formData.append("colour", document.querySelector('.material-option.red.selected, .material-option.orange.selected, .material-option.yellow.selected, .material-option.green.selected, .material-option.blue.selected, .material-option.indigo.selected, .material-option.violet.selected, .material-option.white.selected, .material-option.black.selected')?.textContent || 'N/A');
+    formData.append("colour", document.querySelector('.colour.red.selected, .colour.orange.selected, .colour.yellow.selected, .colour.green.selected, .colour.blue.selected, .colour.indigo.selected, .colour.violet.selected, .colour.white.selected, .colour.black.selected')?.textContent || 'N/A');
     formData.append("infill", document.getElementById("infill").value);
     formData.append("quantity", document.getElementById("quantity").value);
     formData.append("totalCost", document.getElementById("finalTotalCost").textContent);
@@ -594,29 +618,48 @@ document.querySelectorAll('.material-option.red, .material-option.orange, .mater
     // Debugging FormData
     console.log([...formData.entries()]);
 
-    // Show loading indicator
-    const importSummaryField = document.getElementById("importSummaryField");
-    importSummaryField.value = "Processing...";
+// Show loading indicator with animated dots
+const importSummaryField = document.getElementById("importSummaryField");
+importSummaryField.value = "Processing";
 
-    fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Response data:", data);  // Debugging log
+let dotCount = 0;
+const maxDots = 3; // The maximum number of dots (1, 2, 3)
+const interval = setInterval(() => {
+    dotCount++;
+    importSummaryField.value = `Processing${'.'.repeat(dotCount)}`;
+    
+    if (dotCount === maxDots) {
+        dotCount = 0;
+    }
+}, 500);
 
-        if (data.filename) {
-    importSummaryField.value = `${data.filename}`;
-} else {
-            importSummaryField.value = "Request failed";  // Show "Request failed" in the box
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        importSummaryField.value = "Request failed";  // Show "Request failed" in the box if an error occurs
-    });
+// Function to stop the animation
+function stopLoadingAnimation() {
+    clearInterval(interval); // Just stops the interval without changing the field
 }
+
+// Send the form data
+fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
+    method: "POST",
+    body: formData
+})
+.then(response => response.json())
+.then(data => {
+    stopLoadingAnimation(); // Stop animation first
+
+    if (data.filename) {
+        importSummaryField.value = `${data.filename}`;
+    } else {
+        importSummaryField.value = "Request failed";
+    }
+})
+.catch(error => {
+    console.error("Error:", error);
+    stopLoadingAnimation(); // Stop animation even if there's an error
+    importSummaryField.value = "Request failed";
+});
+
+        }
     </script>
 </body>
 </html>
