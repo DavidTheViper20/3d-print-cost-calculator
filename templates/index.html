@@ -341,8 +341,12 @@ input[type="number"] {
         <input type="number" id="wallLayers" value="3" min="1" step="1" style="width: 64px;" />
         <span id="egTextWallLayers" class="hover-text">.eg</span>
         <div id="popupWallLayers" class="popup">
-            <img src="https://via.placeholder.com/100" alt="Sample Image" class="popup-image" />
-            <p class="popup-text">Wall layers are the outermost printed layers of your 3D model. They provide the external strength and durability needed to hold the shape of your object. Increasing the number of wall layers can improve the sturdiness and surface quality of the printed object, making it more resistant to wear and tear.</p>
+            <img 
+            src="{{ url_for('static', filename='images/Wall-layers.JPG') }}" 
+            alt="Layer Height Comparison"
+            style="width: 250px; height: auto; display: block; margin: 0 auto;" 
+        />             
+        <p class="popup-text">Wall layers are the outermost printed layers of your 3D model. They provide the external strength and durability needed to hold the shape of your object. Increasing the number of wall layers can improve the sturdiness and surface quality of the printed object, making it more resistant to wear and tear.</p>
         </div>
     </div>
 
@@ -352,22 +356,32 @@ input[type="number"] {
         <input type="number" id="topBottomLayers" value="2" min="1" step="1" style="width: 64px;" />
         <span id="egTextTopBottom" class="hover-text">.eg</span>
         <div id="popupTopBottom" class="popup">
-            <img src="https://via.placeholder.com/100" alt="Sample Image" class="popup-image" />
+            <img             src="{{ url_for('static', filename='images/TopNBottom-layers.JPG') }}" 
+            alt="Layer Height Comparison"
+            style="width: 250px; height: auto; display: block; margin: 0 auto;" 
+        />   
             <p class="popup-text">Top and bottom layers are the solid layers that cover the top and bottom faces of your 3D print. They provide a smooth surface finish and help seal the interior of the print. The more top/bottom layers you use, the better the surface finish and strength of the top and bottom faces will be. This is especially important for prints where the top needs to be flat and smooth.
             </p>
         </div>
     </div>
 
-    <!-- Layer Height Section -->
-    <div style="display: flex; align-items: center; gap: 6px; position: relative;">
-        <label for="layerHeight">Layer Height (mm):</label>
-        <input type="number" id="layerHeight" value="0.2" min="0.05" max="0.35" step="0.05" style="width: 64px;" />
-        <span id="egTextLayerHeight" class="hover-text">.eg</span>
-        <div id="popupLayerHeight" class="popup">
-            <img src="https://via.placeholder.com/100" alt="Sample Image" class="popup-image" />
-            <p class="popup-text">Layer height refers to the thickness of each individual printed layer. A smaller layer height (e.g., 0.1mm) creates more detailed prints, but takes longer to print. A larger layer height (e.g., 0.3mm) is faster but can result in a rougher surface finish. Choose a layer height based on the level of detail and print speed you're aiming for.</p>
-        </div>
+<!-- Layer Height Section -->
+<div style="display: flex; align-items: center; gap: 6px; position: relative;">
+    <label for="layerHeight">Layer Height (mm):</label>
+    <input type="number" id="layerHeight" value="0.2" min="0.05" max="0.35" step="0.05" style="width: 64px;" />
+    <span id="egTextLayerHeight" class="hover-text">.eg</span>
+    <div id="popupLayerHeight" class="popup">
+        <img 
+            src="{{ url_for('static', filename='images/layer_height-comparison.JPG') }}" 
+            alt="Layer Height Comparison"
+            style="width: 250px; height: auto; display: block; margin: 0 auto;" 
+        />
+        <p class="popup-text">
+            Layer height refers to the thickness of each individual printed layer. A smaller layer height (e.g., 0.1mm) creates more detailed prints, but takes longer to print. A larger layer height (e.g., 0.2mm) is faster but can result in a rougher surface finish. Choose a layer height based on the level of detail and print speed you're aiming for.
+        </p>
     </div>
+</div>
+
     
     <div style="display: flex; align-items: center; gap: 6px;">
         <label for="quantity">Quantity:</label>
