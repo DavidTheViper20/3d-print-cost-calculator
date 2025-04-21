@@ -208,26 +208,9 @@ button:hover {
     z-index: 10;
 }
 
-.infill-popup {
-    position: absolute;
-    bottom: 125%; /* Show above .eg */
-    left: 45%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    width: max-content;
-    min-height: 325px; /* Ensure the popup is tall enough */
-    max-width: 90vw;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    display: none;
-}
-
-/* Show popup on hover */
-.popup-wrapper:hover .infill-popup {
-    display: block;
+/* Slightly shift only the infill popup to the left */
+.popup.infill-shift {
+    left: -100px; /* Adjust this value as needed */
 }
 
 .popup-text {
@@ -323,12 +306,14 @@ input[type="number"] {
   </div>
 </div>
       
+
+<!-- Infill Slider -->
 <div class="input-container" style="position: relative;">
     <label for="infill">
         Infill Density: <span id="infillValue">20</span>%
         <span class="popup-wrapper" style="position: relative; display: inline-block;">
             <span id="egText" class="hover-text">.eg</span>
-            <div id="popup" class="popup infill-popup">
+            <div id="popup" class="popup infill-popup infill-shift">
                 <img 
                     src="{{ url_for('static', filename='images/percentage-of-3D-printed-infill-2.jpg') }}" 
                     alt="Infill Density" 
@@ -342,8 +327,6 @@ input[type="number"] {
         </span>
     </label>
 </div>
-
-
 
 
 

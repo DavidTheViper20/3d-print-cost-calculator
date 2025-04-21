@@ -117,6 +117,10 @@ Notes: {notes}
     return jsonify({"filename": os.path.splitext(zip_filename)[0]})
 
 
+@app.route('/images/<filename>')
+def serve_image(filename):
+    return send_from_directory(os.path.join(app.root_path, 'images'), filename)
+
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     try:
@@ -124,6 +128,8 @@ def download_file(filename):
         return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
     except FileNotFoundError:
         return "File not found", 404
+    
+    
 
 
 if __name__ == '__main__':
