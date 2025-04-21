@@ -122,7 +122,6 @@
 .material-option:hover {
     background-color: #bbb;
 }
-
 /* Colour buttons styling */
 .colour {
     display: inline-block;
@@ -135,29 +134,38 @@
     color: white;
     font-weight: 500;
 }
+
 .colour.selected {
     border: 2px solid black;
 }
+
+/* Grey border for black colour */
+.colour.black.selected {
+    border: 2px solid rgb(122, 122, 122); /* Grey border when black is selected */
+}
+
 .colour.white {
     background-color: #ffffff;
     color: black;
 }
+
 .colour.black {
     background-color: #000000;
     color: white;
-    border-color: rgb(122, 122, 122);
 }
-.colour.red { background-color: #f44336; color: black;}
-.colour.orange { background-color: #ff9800; color: black;}
+
+.colour.red { background-color: #f44336; color: black; }
+.colour.orange { background-color: #ff9800; color: black; }
 .colour.yellow { background-color: #ffeb3b; color: black; }
-.colour.green { background-color: #4caf50; color: black;}
-.colour.blue { background-color: #2196f3; color: black;}
-.colour.indigo { background-color: #3f51b5; color: black;}
-.colour.violet { background-color: #9c27b0; color: black;}
+.colour.green { background-color: #4caf50; color: black; }
+.colour.blue { background-color: #2196f3; color: black; }
+.colour.indigo { background-color: #3f51b5; color: black; }
+.colour.violet { background-color: #9c27b0; color: black; }
 
 .input-container label {
     margin-top: 15px;
 }
+
 
 /* Quantity input styles */
 .quantity-container {

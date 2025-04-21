@@ -87,8 +87,6 @@ def generate_zip():
     wall = request.form.get("wallLayers", "N/A")
     top_bottom = request.form.get("topBottomLayers", "N/A")
     layer = request.form.get("layerHeight", "N/A")
-    weight = request.form.get("influencedWeight", "N/A")
-    print_time = request.form.get("printTime", "N/A")
     notes = request.form.get("notes", "N/A")
 
     build_text = f"""Material: {material}
@@ -99,8 +97,6 @@ Total Cost: ${cost}
 Wall Layers: {wall}
 Top/Bottom Layers: {top_bottom}
 Layer Height: {layer}
-Influenced Weight: {weight}
-Print Time: {print_time}
 Notes: {notes}
 """
 
