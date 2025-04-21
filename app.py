@@ -114,7 +114,7 @@ Notes: {notes}
         zipf.writestr("build_parameters.txt", build_text)  # Write parameters text file
 
     download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"  # Correct URL
-    return jsonify({"url": download_url})
+    return jsonify({"filename": zip_filename})
 
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):

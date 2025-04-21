@@ -509,10 +509,9 @@
     .then(data => {
         console.log("Response data:", data);  // Debugging log
 
-        if (data.url) {
-            const downloadUrl = data.url;
-            importSummaryField.value = `${downloadUrl}`;  // Show the download link
-        } else {
+        if (data.filename) {
+    importSummaryField.value = `Your download filename: ${data.filename}`;
+} else {
             importSummaryField.value = "Request failed";  // Show "Request failed" in the box
         }
     })
