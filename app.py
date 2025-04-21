@@ -69,6 +69,24 @@ def upload_file():
             return jsonify({'error': 'Failed to calculate volume'})
     return jsonify({'error': 'Invalid file type'})
 
+
+# Function to generate the filename with date, price, and random string
+def generate_filename(price):
+    # Get the current date and time in YYYYMMDDHHMMSS format
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+    # Add 'P' followed by the price (rounded to two decimal places)
+    formatted_price = f"P{float(price):.2f}"
+
+    # Generate a random string for uniqueness (e.g., 6 random digits)
+    random_string = f"E{random.randint(100000, 999999)}"
+
+    # Combine them into the final filename
+    filename = f"BabyZen_Yoyo_Replacement_Button_{timestamp}_{formatted_price}_{random_string}"
+
+    return filename
+
+
 @app.route('/generate_zip', methods=['POST'])
 def generate_zip():
     if 'stlFile' not in request.files:
@@ -100,13 +118,12 @@ Layer Height: {layer}
 Notes: {notes}
 """
 
-    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    zip_filename = f"{stl_name}_{timestamp}.zip"
+    # Generate the new filename with price
+    filename = generate_filename(cost)
+
+    zip_filename = f"{filename}.zip"
     zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
     print(f"ZIP file will be saved at: {zip_path}")
-
-
-    
 
     # Creating the ZIP file
     with zipfile.ZipFile(zip_path, 'w') as zipf:
@@ -127,7 +144,5 @@ def download_file(filename):
         return "File not found", 404
 
 
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    app.run(debug=True)
