@@ -32,6 +32,7 @@ h1 {
 label {
     font-size: 1.1em;
     margin-bottom: 5px;
+    color: #444; /* 🔸 Lighter label text */
 }
 
 input, button {
@@ -53,12 +54,17 @@ input, button {
 
 .result p {
     margin: 5px 0;
+    color: #555; /* 🔸 Slightly lighter result text */
+}
+
+#print-time-section p {
+    color: #555; /* 🔸 Lighter print time text */
 }
 
 #uploadStatus {
     font-style: italic;
     margin-top: 10px;
-    color: #333;
+    color: #666; /* 🔸 Subtle status text */
 }
 
 button {
@@ -84,6 +90,7 @@ button:hover {
 
 .print-time-section p {
     margin: 5px 0;
+    color: #555; /* 🔸 Lighter text */
 }
 
 .total-cost {
@@ -181,6 +188,7 @@ button:hover {
 
 .input-container label {
     margin-top: 15px;
+    color: #444; /* 🔸 Match lighter tone */
 }
 
 .quantity-container {
@@ -193,6 +201,7 @@ button:hover {
 
 .quantity-container label {
     margin-bottom: 5px;
+    color: #444; /* 🔸 Lighter text */
 }
 
 /* General Hover Text Styles */
@@ -204,13 +213,13 @@ button:hover {
     color: #ff9c40;
     text-decoration: underline;
     font-family: 'Avenir Next', sans-serif;
-    position: relative; /* Position relative to its container */
+    position: relative;
     z-index: 10;
 }
 
 /* Slightly shift only the infill popup to the left */
 .popup.infill-shift {
-    left: -160px; /* Adjust this value as needed */
+    left: -160px;
 }
 
 .popup-text {
@@ -247,12 +256,43 @@ input[type="number"] {
     margin-top: 5px;
     margin-left: 10px;
     box-sizing: border-box;
+    border-radius: 6px; /* Rounded number fields */
+    border: 0.5px solid #d3d3d3; /* Very thin grey border */
 }
 
 .popup-image {
     width: 100%;
     max-width: 50px;
     height: auto;
+}
+
+input[type="text"]#importSummaryField {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    color: #555;
+    font-style: italic;
+}
+
+/* Added styling for the button with Shopify aesthetic */
+button[onclick="importSummary()"] {
+    padding: 10px 20px;
+    border: none;
+    background: #f5f5f5;
+    color: black; /* Black font */
+    border-radius: 6px;
+    border: 2px solid #727272;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+button[onclick="importSummary()"]:hover {
+    background: #e5e5e5;
 }
 
     </style>
@@ -274,7 +314,7 @@ input[type="number"] {
               <input type="file" id="fileInput" />
               <div style="display: flex; flex-direction: column;">
                 <p id="uploadStatus" style="color: grey; font-size: 0.9rem; font-style: italic; font-family: 'Avenir Next', sans-serif; margin: 0;"></p>
-                <span id="uploadDisclaimer" style="color: grey; font-size: 0.8rem; font-style: italic; font-family: 'Avenir Next', sans-serif; margin-top: 2px; display: none;">This may take a moment</span>
+                <span id="uploadDisclaimer" style="color: grey; font-size: 0.8rem; font-style: italic; font-family: 'Avenir Next', sans-serif; margin-top: 2px; display: none;">This may take a moment please be patient</span>
               </div>
             </div>
       
@@ -398,14 +438,12 @@ input[type="number"] {
             <!-- Total Cost -->
             <div class="total-cost">
               <p><strong>Total Cost:</strong> $<span id="finalTotalCost">0.00</span></p>
-
-
-              <!-- Add this right below -->
-<button onclick="importSummary()" style="margin-top: 10px;">Finalise Order</button>
-<input type="text" id="importSummaryField" placeholder="Imported details will appear here..." readonly style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc;" />
-
           </div>
       
+            <!-- Add this right below -->
+<button onclick="importSummary()" style="margin-top: 10px;">Generate Quote ID!</button>
+<input type="text" id="importSummaryField" placeholder="Your unique order ID will appear here..." readonly style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc;" />
+
           <!-- Settings Box -->
           <div class="settings">
             <h2>Master Settings</h2>
