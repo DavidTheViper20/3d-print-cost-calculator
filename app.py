@@ -101,7 +101,7 @@ Notes: {notes}
 """
 
     # Format cost and filename
-    formatted_cost = cost.replace('.', '_') if cost != "N/A" else "N_A"
+    formatted_cost = cost.replace('.', '') if cost != "N/A" else "N_A"
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     zip_filename = f"{stl_name}_{formatted_cost}_{timestamp}.zip"
     zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
