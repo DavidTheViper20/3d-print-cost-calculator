@@ -103,7 +103,7 @@ Notes: {notes}
     # Format cost and filename
     formatted_cost = cost.replace('.', '') if cost != "N/A" else "N_A"
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    zip_filename = f"{stl_name}_{formatted_cost}{timestamp}.zip"
+    zip_filename = f"3DModel{formatted_cost}{timestamp}.zip"
     zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
     print(f"ZIP file will be saved at: {zip_path}")
 
