@@ -11,7 +11,7 @@ body {
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
-    background: #f9f9f9;
+    background: #ffffff;
     display: flex;
     justify-content: space-between;
 }
@@ -367,8 +367,6 @@ button[onclick="importSummary()"]:hover {
         </span>
     </label>
 </div>
-
-
 
     <input type="range" id="infill" min="0" max="100" value="20" oninput="updateInfillValue()">
 </div>
@@ -779,12 +777,14 @@ document.querySelectorAll('.material-option.red, .material-option.orange, .mater
     });
 });
 
-        function importSummary() {
+function importSummary() {
     const stlFileInput = document.getElementById("fileInput");
     const stlFile = stlFileInput.files[0];
+    const totalCost = document.getElementById("finalTotalCost").textContent.trim();
+    const importSummary = document.getElementById("importSummaryField");
 
-    if (!stlFile) {
-        alert("Please upload an STL file first!");
+    if (totalCost === "$0.00" || totalCost === "0.00" || totalCost === "0") {
+        importSummaryField.value = "Please complete your order details first!";
         return;
     }
 
@@ -850,13 +850,14 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
     const quoteField = document.getElementById("importSummaryField");
     const quoteID = quoteField.value.trim();
 
-    if (quoteID.length === 0) {
-        return; // Do nothing if empty
+    // Only allow copy if the quoteID contains "3D"
+    if (quoteID.length === 0 || !quoteID.includes("3D")) {
+        return; // Do nothing if empty or missing "3D"
     }
 
     navigator.clipboard.writeText(quoteID)
         .then(() => {
-            // Optionally show a small visual feedback like changing button text briefly
+            // Visual feedback
             const copyButton = document.getElementById("copyButton");
             const originalText = copyButton.innerHTML;
             copyButton.innerHTML = "✔️";
@@ -868,8 +869,6 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
             console.error("Clipboard copy failed", err);
         });
 }
-
-
     </script>
 </body>
 </html>
