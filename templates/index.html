@@ -517,18 +517,15 @@ button[onclick="importSummary()"]:hover {
       const nozzleSize = 0.4;  
       let selectedMaterial = "PLA";  // Default material
       let fileUploaded = false;      // Track if STL has been uploaded
-  
       document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
-    const uploadStatus = document.getElementById('uploadStatus');
-    const uploadDisclaimer = document.getElementById('uploadDisclaimer');
-    
     if (file) {
+        const uploadStatus = document.getElementById('uploadStatus');  // Cache this once
+
         let dotCount = 0;
         const maxDots = 3;
 
         uploadStatus.textContent = `Uploading ${file.name}`;
-        uploadDisclaimer.style.display = "inline";  // show the disclaimer
 
         // Start animated dots
         const uploadInterval = setInterval(() => {
@@ -543,36 +540,34 @@ button[onclick="importSummary()"]:hover {
         fetch('/upload', { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-                clearInterval(uploadInterval); // stop animation
+                clearInterval(uploadInterval); // ✅ Stop animation when done
 
                 if (data.error) {
-                    uploadStatus.textContent = `Error uploading ${file.name}`;
-                    uploadDisclaimer.style.display = "none";
                     alert("Error: " + data.error);
                 } else {
                     if (data.volumeMm3) {
                         volumeMm3 = data.volumeMm3;
-                        fileUploaded = true;  // Mark file as uploaded
                         weightG = calculateWeight(volumeMm3);
                         document.getElementById("volume").textContent = volumeMm3;
                         document.getElementById("weight").textContent = weightG.toFixed(2);
-                        calculateCost();  // Trigger price update
+                        fileUploaded = true; 
+                        uploadStatus.textContent = `Uploaded: ${file.name}`;
+                        calculateCost();  // ✅ Trigger price update
+
                     } else {
                         console.error('No volume data returned.');
                     }
-
-                    uploadStatus.textContent = `Uploaded: ${file.name}`;
-                    uploadDisclaimer.style.display = "none"; // hide disclaimer
+                    document.getElementById("uploadStatus").textContent = `Uploaded: ${file.name}`;
                 }
             })
             .catch(error => {
-                clearInterval(uploadInterval); // stop animation
+                clearInterval(uploadInterval); // ✅ Stop animation even if fetch errors
                 console.error("Error:", error);
-                uploadStatus.textContent = `Error uploading ${file.name}`;
-                uploadDisclaimer.style.display = "none";
             });
     }
 });
+
+
 
       function selectMaterial(material) {
     // Deselect all materials
@@ -655,37 +650,6 @@ function selectColour(colour) {
             return printTimeMinutes / 60;
         }
 
-document.getElementById('fileInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        document.getElementById('uploadStatus').textContent = `Uploading ${file.name}...`;
-
-        let formData = new FormData();
-        formData.append("file", file);
-
-        fetch('/upload', { method: "POST", body: formData })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert("Error: " + data.error);
-                } else {
-                    if (data.volumeMm3) {
-                        fileUploaded = true;
-                        volumeMm3 = data.volumeMm3;
-                        weightG = calculateWeight(volumeMm3);
-                        document.getElementById("volume").textContent = volumeMm3;
-                        document.getElementById("weight").textContent = weightG.toFixed(2);
-                    } else {
-                        console.error('No volume data returned.');
-                    }
-                    document.getElementById("uploadStatus").textContent = `Uploaded: ${file.name}`;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-    }
-});
 
 function calculateCost() {
     if (!fileUploaded) {
@@ -869,18 +833,17 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
         });
 }
 
-function copyQuoteID() {
+   function copyQuoteID() {
     const quoteField = document.getElementById("importSummaryField");
     const quoteID = quoteField.value.trim();
 
-    // Only allow copy if the quoteID contains "3D"
-    if (quoteID.length === 0 || !quoteID.includes("3DModel")) {
-        return; // Do nothing if empty or missing "3D"
+    if (quoteID.length === 0) {
+        return; // Do nothing if empty
     }
 
     navigator.clipboard.writeText(quoteID)
         .then(() => {
-            // Visual feedback
+            // Optionally show a small visual feedback like changing button text briefly
             const copyButton = document.getElementById("copyButton");
             const originalText = copyButton.innerHTML;
             copyButton.innerHTML = "✔️";
