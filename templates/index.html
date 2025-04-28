@@ -850,8 +850,31 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
     const quoteField = document.getElementById("importSummaryField");
     const quoteID = quoteField.value.trim();
 
+    if (quoteID.length === 0) {
+        return; // Do nothing if empty
+    }
+
+    navigator.clipboard.writeText(quoteID)
+        .then(() => {
+            // Optionally show a small visual feedback like changing button text briefly
+            const copyButton = document.getElementById("copyButton");
+            const originalText = copyButton.innerHTML;
+            copyButton.innerHTML = "✔️";
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+            }, 1000);
+        })
+        .catch(err => {
+            console.error("Clipboard copy failed", err);
+        });
+}
+
+function copyQuoteID() {
+    const quoteField = document.getElementById("importSummaryField");
+    const quoteID = quoteField.value.trim();
+
     // Only allow copy if the quoteID contains "3D"
-    if (quoteID.length === 0 || !quoteID.includes("3D")) {
+    if (quoteID.length === 0 || !quoteID.includes("3DModel")) {
         return; // Do nothing if empty or missing "3D"
     }
 
@@ -869,6 +892,7 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
             console.error("Clipboard copy failed", err);
         });
 }
+
     </script>
 </body>
 </html>
