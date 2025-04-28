@@ -728,7 +728,10 @@ function calculateCost() {
     document.getElementById("materialCost").textContent = materialCost.toFixed(2);
     document.getElementById("timeCost").textContent = timeCost.toFixed(2);
     document.getElementById("totalCost").textContent = totalCost.toFixed(2);
-    document.getElementById("finalTotalCost").textContent = totalCost.toFixed(2);
+
+    // Round up to nearest 10 cents
+const roundedTotalCost = Math.ceil(totalCost * 10) / 10;
+document.getElementById("finalTotalCost").textContent = roundedTotalCost.toFixed(2);getElementById("finalTotalCost").textContent = totalCost.toFixed(2);
 }
 
 // Recalculate whenever quantity changes
