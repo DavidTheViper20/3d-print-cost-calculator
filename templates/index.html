@@ -7,44 +7,50 @@
     <style>
 body {
     font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f9f9f9;
-            display: flex;
-            justify-content: space-between;
-        }
-        h1 {
-            text-align: center;
-            width: 100%;
-        }
-        .input-container {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            width: 100%;
-        }
-        label {
-            font-size: 1.1em;
-            margin-bottom: 5px;
-        }
-        input, button {
-            width: 100%;
-            padding: 10px;
-            font-size: 1em;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 1.2em;
-            padding: 10px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+}
+
+h1 {
+    text-align: center;
+    width: 100%;
+}
+
+.input-container {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: #444; /* 🔸 Lighter label text */
+}
+
+input, button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 1.2em;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
 
 .result p {
     margin: 5px 0;
@@ -301,7 +307,7 @@ button[onclick="importSummary()"]:hover {
         <div class="print-calculator" style="padding: 2rem; background-color: #f8f9fa; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); font-family: 'Avenir Next', sans-serif;">
           <div class="left-container"> 
             <h1 style="color: #49220D; font-family: Avenir Next ; font-weight: 400; font-size: 2.5rem;">
-              Custom 3D Prints
+              3D Print Calculator
             </h1>
             
             <div id="file-upload-container" style="display: flex; flex-direction: column; width: 100%;">
@@ -511,15 +517,18 @@ button[onclick="importSummary()"]:hover {
       const nozzleSize = 0.4;  
       let selectedMaterial = "PLA";  // Default material
       let fileUploaded = false;      // Track if STL has been uploaded
+     
       document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
-        const uploadStatus = document.getElementById('uploadStatus');  // Cache this once
+        const uploadStatus = document.getElementById('uploadStatus');
+        const uploadDisclaimer = document.getElementById('uploadDisclaimer'); // ⚡ Make sure this element exists
 
         let dotCount = 0;
         const maxDots = 3;
 
         uploadStatus.textContent = `Uploading ${file.name}`;
+        uploadDisclaimer.style.display = "inline";  // ✅ Show "please be patient" message
 
         // Start animated dots
         const uploadInterval = setInterval(() => {
@@ -534,7 +543,8 @@ button[onclick="importSummary()"]:hover {
         fetch('/upload', { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-                clearInterval(uploadInterval); // ✅ Stop animation when done
+                clearInterval(uploadInterval); // ✅ Stop animation
+                uploadDisclaimer.style.display = "none";  // ✅ Hide the "please be patient" message
 
                 if (data.error) {
                     alert("Error: " + data.error);
@@ -555,12 +565,12 @@ button[onclick="importSummary()"]:hover {
                 }
             })
             .catch(error => {
-                clearInterval(uploadInterval); // ✅ Stop animation even if fetch errors
+                clearInterval(uploadInterval); // ✅ Stop animation even if error
+                uploadDisclaimer.style.display = "none"; // ✅ Hide disclaimer even if error
                 console.error("Error:", error);
             });
     }
 });
-
 
 
       function selectMaterial(material) {
