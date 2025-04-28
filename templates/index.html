@@ -284,7 +284,7 @@ button[onclick="importSummary()"] {
     background: #f5f5f5;
     color: black; /* Black font */
     border-radius: 6px;
-    border: 2px solid #727272;
+    border: 1px solid #727272;
     cursor: pointer;
     font-weight: 500;
     transition: background 0.3s;
@@ -442,8 +442,15 @@ button[onclick="importSummary()"]:hover {
       
             <!-- Add this right below -->
 <button onclick="importSummary()" style="margin-top: 10px;">Generate Quote ID!</button>
-<input type="text" id="importSummaryField" placeholder="Your unique order ID will appear here..." readonly style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc;" />
 
+<!-- Input and Copy Button (on a separate line) -->
+<div style="display: flex; align-items: center; margin-top: 10px;">
+    <input type="text" id="importSummaryField" placeholder="Your unique order ID will appear here..." readonly style="flex: 1; padding: 10px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc; min-width: 850px;" />
+    <button id="copyButton" onclick="copyQuoteID()" style="margin-left: 8px; padding: 8px; font-size: 1em; border-radius: 5px; background-color: #f5f5f5; color: black; border: 1px solid black; cursor: pointer; width: 100%;">
+        Copy
+      </button>
+  </div>
+  
           <!-- Settings Box -->
           <div class="settings">
             <h2>Master Settings</h2>
@@ -839,6 +846,29 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
 
         }
     
+        function copyQuoteID() {
+    const quoteField = document.getElementById("importSummaryField");
+    const quoteID = quoteField.value.trim();
+
+    if (quoteID.length === 0) {
+        return; // Do nothing if empty
+    }
+
+    navigator.clipboard.writeText(quoteID)
+        .then(() => {
+            // Optionally show a small visual feedback like changing button text briefly
+            const copyButton = document.getElementById("copyButton");
+            const originalText = copyButton.innerHTML;
+            copyButton.innerHTML = "✔️";
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+            }, 1000);
+        })
+        .catch(err => {
+            console.error("Clipboard copy failed", err);
+        });
+}
+
 
     </script>
 </body>
