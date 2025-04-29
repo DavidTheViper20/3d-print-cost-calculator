@@ -860,6 +860,24 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
         });
 }
 
+window.addEventListener("load", function () {
+  // Reset infill slider and label
+  const infillSlider = document.getElementById("infill");
+  const infillLabel = document.getElementById("infillValue");
+  if (infillSlider && infillLabel) {
+    infillSlider.value = 20;
+    infillLabel.textContent = "20";
+  }
+
+  // Reset upload label
+  const fileInput = document.getElementById("fileInput");
+  const uploadStatus = document.getElementById("uploadStatus");
+  if (fileInput && uploadStatus) {
+    fileInput.value = "";
+    uploadStatus.textContent = "";
+  }
+});
+
     </script>
 </body>
 </html>
