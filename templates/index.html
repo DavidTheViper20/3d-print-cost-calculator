@@ -830,26 +830,32 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
         });
 }
 
-   function copyQuoteID() {
+function copyQuoteID() {
     const quoteField = document.getElementById("importSummaryField");
-    const quoteID = quoteField.value.trim();
 
-    if (quoteID.length === 0) {
-        return; // Do nothing if empty
+    if (!quoteField || !quoteField.value.trim()) {
+        return;
     }
 
-    navigator.clipboard.writeText(quoteID)
-        .then(() => {
-            // Optionally show a small visual feedback like changing button text briefly
-            const copyButton = document.getElementById("copyButton");
-            const originalText = copyButton.innerHTML;
-            copyButton.innerHTML = "✔️";
-            setTimeout(() => {
-                copyButton.innerHTML = originalText;
-            }, 1000);
-        });
-}
+    // Select the text in the input box
+    quoteField.select();
+    quoteField.setSelectionRange(0, 99999); // For mobile devices
 
+    try {
+        const successful = document.execCommand('copy'); // Fallback for older browsers
+        navigator.clipboard.writeText(quoteField.value.trim()); // Modern way
+
+        // Show visual feedback
+        const copyButton = document.getElementById("copyButton");
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = "✔️";
+        setTimeout(() => {
+            copyButton.innerHTML = originalText;
+        }, 1000);
+
+    } catch (err) {
+    }
+}
 window.addEventListener("load", function () {
   // Reset infill slider and label
   const infillSlider = document.getElementById("infill");
