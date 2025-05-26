@@ -6,6 +6,8 @@ from io import BytesIO
 import numpy as np
 from stl import mesh
 import datetime
+import smtplib
+from email.message import EmailMessage
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -19,6 +21,29 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Ensure folders exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+
+# 📩 Send ZIP file via email
+def send_zip_file_via_email(zip_path, zip_id):
+    sender_email = 'ultifab23@gmail.com'
+    receiver_email = 'ultifab23@gmail.com'
+    sender_password = 'kmux dtuk peey ebdp'  # 🔁 Replace with your Gmail app password
+
+    msg = EmailMessage()
+    msg['Subject'] = f'New 3D Print Quote - {zip_id}'
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg.set_content(f'A new quote has been generated.\n\nQuote ID: {zip_id}\nSee attached ZIP file.')
+
+    with open(zip_path, 'rb') as f:
+        msg.add_attachment(f.read(), maintype='application', subtype='zip', filename=f'{zip_id}.zip')
+
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login(sender_email, sender_password)
+            smtp.send_message(msg)
+            print(f"[✅] Email sent with attachment {zip_id}.zip")
+    except Exception as e:
+        print(f"[❌] Failed to send email: {e}")
 
 # Helper function to check allowed file extensions
 def allowed_file(filename):
@@ -103,7 +128,8 @@ Notes: {notes}
     # Format cost and filename
     formatted_cost = cost.replace('.', '') if cost != "N/A" else "N_A"
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    zip_filename = f"3DModel{formatted_cost}{timestamp}.zip"
+    zip_id = f"3DModel{formatted_cost}{timestamp}"
+    zip_filename = f"{zip_id}.zip"
     zip_path = os.path.join(DOWNLOAD_FOLDER, zip_filename)
     print(f"ZIP file will be saved at: {zip_path}")
 
@@ -113,13 +139,14 @@ Notes: {notes}
         zipf.writestr(f"{stl_name}.stl", stl_data)  # Write the STL file
         zipf.writestr("build_parameters.txt", build_text)  # Write parameters
 
-    download_url = f"https://threed-print-cost-calculator.onrender.com/download/{zip_filename}"
-    return jsonify({"filename": os.path.splitext(zip_filename)[0]})
+    # ✅ Send ZIP file by email
+    send_zip_file_via_email(zip_path, zip_id)
+
+    return jsonify({"filename": zip_id})
 
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     try:
-        # Flask will look in the 'static/downloads/' folder for the file
         return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
     except FileNotFoundError:
         return "File not found", 404
