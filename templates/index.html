@@ -798,6 +798,13 @@ fetch("https://threed-print-cost-calculator.onrender.com/generate_zip", {
 
     if (data.filename) {
         importSummaryField.value = `${data.filename}`;
+
+        // Send quote ID to parent Shopify page
+window.parent.postMessage({
+  type: 'QUOTE_GENERATED',
+  quoteId: data.filename
+}, 'https://ultifab.myshopify.com/'); // You can replace '*' with your Shopify domain for security
+
     } else {
         importSummaryField.value = "Request failed";
     }
